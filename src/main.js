@@ -6,6 +6,10 @@ import {routerMode} from './config/env'
 import './config/rem'
 import FastClick from 'fastclick'
 
+import Mint from 'mint-ui';
+Vue.use(Mint);
+import 'mint-ui/lib/style.css';
+
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {
         FastClick.attach(document.body);
