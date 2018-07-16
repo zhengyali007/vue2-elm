@@ -166,7 +166,7 @@ export default {
  					}
  				})
 			}else{
-				zhunStatus = false;
+			zhunStatus = false;
 			}
 			return zhunStatus
 		},

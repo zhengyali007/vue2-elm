@@ -25,10 +25,16 @@
 </template>
 
 <script>
+  import {loadMore} from 'src/components/common/mixin'
+  import {animate} from 'src/config/mUtils'
+  import loading from 'src/components/common/loading'
+
   export default {
-    components: {},
+    components: { loading },
+    mixins: [loadMore],
     data() {
       return {
+        loading: true,
         //邮箱编号列表
         numbers: [
           {
@@ -65,6 +71,9 @@
     },
     mounted() {},
     methods: {
+      //获取考勤列表
+
+      //查看详情
       checkDetails() {
         this.$router.push({path: '/attendanceDetails'})
       }

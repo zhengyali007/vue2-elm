@@ -5,9 +5,13 @@ import {getStore} from '../config/mUtils'
  * 获取首页默认地址
  */
 
-export const cityGuess = () => fetch('/v1/cities', {
-	type: 'guess'
+var cityGuess = (id) => fetch('GET','/smartPostBox/wx/postMan', {
+	id: '1'
 });
+
+export {
+  cityGuess
+};
 
 
 /**

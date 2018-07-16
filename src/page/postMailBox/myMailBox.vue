@@ -6,7 +6,7 @@
     </mt-navbar>
     <div class="list" v-if="selected === '1'">
       <div class="sort">
-        <div class="sort-title"  @click="changeSort">信件量：
+        <div class="sort-title" @click="changeSort">信件量：
           <img v-show="active" class="sort-control" src="../../images/postDesc.png"/>
           <img v-show="!active" class="sort-control" src="../../images/postAsc.png"/>
         </div>
@@ -14,7 +14,7 @@
         <!--<label class="sort-control sort2" :class = "{ sorted: !active}" @click="ascending">由低到高</label>-->
         <button class="break">只看故障邮筒</button>
       </div>
-      <ul>
+      <ul v-load-more="loaderMore">
         <li v-for="item in numbers">
           <section class="mail-box-list">
             <img class="list-img" src="../../images/postBox.png"/>
@@ -33,26 +33,43 @@
           </section>
         </li>
       </ul>
+      <aside class="return_top" @click="backTop" v-if="showBackStatus">
+        <svg class="back_top_svg">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
+        </svg>
+      </aside>
     </div>
     <div class="location" v-else>
     </div>
 
+
+    <transition name="loading">
+      <loading v-show="showLoading"></loading>
+    </transition>
   </div>
 </template>
 
 <script>
-  import { Navbar, TabItem } from 'mint-ui';
+  import {Navbar, TabItem} from 'mint-ui';
   import wx from 'weixin-js-sdk'
+  import {loadMore} from 'src/components/common/mixin'
+  import {animate} from 'src/config/mUtils'
+  import loading from 'src/components/common/loading'
+  import {getMailBoxList} from  'src/service/getData'
 
   export default {
     components: {
-      Navbar, TabItem
+      Navbar, TabItem, loading
     },
+    mixins: [loadMore],
     data() {
       return {
         selected: '1',
-        active: true,
-        //邮箱编号列表
+        active: true,//调整升序降序
+        showLoading: false,// 展示loading图标
+        showBackStatus: false,// 展示"回到顶部"图标
+        asc: true,// 升序降序请求标识，控制加载更多请求数据
+        //邮箱列表数据
         numbers: [
           {
             number: 'MB000000000001',
@@ -98,19 +115,99 @@
       }
     },
     watch: {
-      selected:function () {
+      //监听tab切换
+      selected: function () {
         console.log(this.selected)
       }
     },
     mounted() {
+      this.getList()
     },
     methods: {
+      //获取数据
+      async getList(){
+        var id = 'be5a6278a1dd4a3684ddf6895a86f780';
+        // alert(1)
+        var myMail = await getMailBoxList(id);
+        var test = myMail.headers.get('content-type')
+        console.log(test)
+        // alert(2)
+        if(myMail.status == 200){
+          this.numbers = myMail.data;
+        }else{
+          this.numbers==null;
+        }
+        this.showLoading=false;
+      },
+      //查看详情
       checkDetails() {
         this.$router.push({path: '/mailBoxDetail'})
       },
       //改变排序方式
-      changeSort () {
+      changeSort() {
         this.active = !this.active
+      },
+      //到达底部加载更多数据
+      async loaderMore() {
+        if (this.touchend) {
+          return
+        }
+        //防止重复请求
+        if (this.preventRepeatReuqest) {
+          return
+        }
+        this.showLoading = true;
+        this.preventRepeatReuqest = true;
+
+        //数据的定位加10位
+        this.offset += 10;
+        let res = [  {
+          number: 'test1',
+          letterNo: 96,
+          status: 1
+        },
+          {
+            number: 'test2',
+            letterNo: 90,
+            status: 2
+          },
+          {
+            number: 'test3',
+            letterNo: 80,
+            status: 1
+          },{
+            number: 'test4',
+            letterNo: 80,
+            status: 1
+          },{
+            number: 'test5',
+            letterNo: 80,
+            status: 1
+          },{
+            number: 'test6',
+            letterNo: 80,
+            status: 1
+          },{
+            number: 'test7',
+            letterNo: 80,
+            status: 1
+          }];
+
+        // let res = await shopList(this.latitude, this.longitude, this.offset, this.restaurantCategoryId);
+        this.showLoading = false;
+        console.log(this.numbers)
+        this.numbers = [...this.numbers, ...res];
+        console.log(this.numbers)
+        //当获取数据小于10，说明没有更多数据，不需要再次请求数据
+        if (res.length < 10) {
+          this.touchend = true;
+          return
+        }
+        this.preventRepeatReuqest = false;
+      },
+      //返回顶部
+      backTop() {
+        animate(document.body, {scrollTop: '0'}, 400, 'ease-out');
       },
       // 微信分参数
       getConfig() {
@@ -123,7 +220,7 @@
         //   let res = response.data;
         // })
       },
-  },
+    },
   }
 </script>
 
@@ -139,8 +236,6 @@
     color: #333;
   }
 
-
-
   .list {
   }
 
@@ -155,7 +250,7 @@
     position: relative;
     width: 20%;
     height: 30px;
-    top:5px;
+    top: 5px;
     /*right: 10px;*/
     left: 72%;
     /*padding-left:10px;*/
@@ -169,7 +264,6 @@
     top: 5px;
     margin-left: 5px;
   }
-
 
   .break {
     position: absolute;
@@ -189,7 +283,7 @@
     margin-bottom: 10px;
   }
 
-  .list-img{
+  .list-img {
     position: absolute;
     width: 42px;
     height: 42px;
@@ -214,7 +308,7 @@
     bottom: 5px;
   }
 
-  .list-letter  img{
+  .list-letter img {
     position: relative;
     width: 16px;
     height: 16px;
@@ -252,6 +346,15 @@
     top: 15px;
     background-color: #ffffff;
     color: #007aff;
+  }
+
+  .return_top{
+    position: fixed;
+    bottom: 2rem;
+    right: 1rem;
+    .back_top_svg{
+      @include wh(1.5rem, 1.5rem);
+    }
   }
 
 

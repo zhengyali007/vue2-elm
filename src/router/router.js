@@ -109,6 +109,10 @@ export default [{
             path: '',
             redirect: '/test'
         },
+      // {
+      //       path: '',
+      //       redirect: '/home'
+      //   },
         //首页城市列表页
         {
             path: '/home',

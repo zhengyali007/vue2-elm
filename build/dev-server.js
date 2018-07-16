@@ -37,8 +37,8 @@ compiler.plugin('compilation', function(compilation) {
 var context = config.dev.context
 
 switch(process.env.NODE_ENV){
-    case 'local': var proxypath = 'http://192.168.1.9:8001'; break;
-    case 'online': var proxypath = 'http://elm.cangdu.org'; break;
+    case 'local': var proxypath = 'http://192.168.1.9:8000'; break;
+    case 'online': var proxypath = 'http://192.168.1.245:8081'; break;
     default:  var proxypath = config.dev.proxypath;
 }
 var options = {

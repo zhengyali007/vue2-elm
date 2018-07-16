@@ -30,7 +30,7 @@
     data() {
       return {
         count: '',
-        codeShow: true,
+        codeShow: true, // 获取验证码
         timer: null
       }
     },
@@ -56,7 +56,7 @@
     //  绑定
       bind () {
         this.$router.push({path: '/postProfile'})
-      }
+      },
     },
   }
 </script>
