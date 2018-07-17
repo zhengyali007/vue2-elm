@@ -21,12 +21,24 @@ let ordinaryUserWhiteList = appOrdinaryUserWhiteList;
  * 获取首页默认地址
  */
 
-var cityGuess = (id) => fetch('GET','/smartPostBox/wx/postMan', {
-	id: '1'
+// 获取验证码
+  var getAuthCode = (phone) => fetch('POST','/'+serverName+'/wx/smsCode',{
+      phone: phone,
+      // token: '1111'
 });
 
+//  绑定账号
+// http://192.168.1.253:8081/smartPostBox/wx/bindingUser?phone=18119606121&openid=xxxx&smsCode=123456
+ var bindingUser = (phone,smsCode,openid) => fetch('POST','/'+serverName+'/wx/bindingUser',{
+   phone: phone,
+   smsCode: smsCode,
+   openid: openid,
+ });
+
+
 export {
-  cityGuess,
+  getAuthCode,
+  bindingUser,
   serverUrl,
   weiXinUrl,
   appid,
