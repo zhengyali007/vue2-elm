@@ -79,9 +79,14 @@
         formData.append('phone','18119606121')
         formData.append('token','test')
         fetch(url, {
-          headers: {},
+          method: 'POST',
+          headers: new Headers({
+            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+          }),
           body: formData,
-      }).then((res)=>{
+      })
+          .then((res)=>{
+            console.log(res)
             return res.text()
           })
           .then((res)=>{

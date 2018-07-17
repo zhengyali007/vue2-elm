@@ -1,5 +1,6 @@
 import {
-  baseUrl
+  baseUrl,
+  loginUrl
 } from './env'
 
 
@@ -12,6 +13,8 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
     Object.keys(data).forEach(key => {
       dataStr += key + '=' + data[key] + '&';
     })
+    dataStr += 'token=1111'
+    console.log(dataStr)
   }
   dataStr=dataStr.substring(0, dataStr.length - 1)
   //console.log(dataStr);
@@ -21,11 +24,12 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
     Object.keys(data).forEach(key => {
       dataStr += key + '=' + data[key] + '&';
     })
-
+    dataStr += 'token=1111'
     if (dataStr !== '') {
       dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
       url = url + '?' + dataStr;
     }
+    console.log(dataStr)
   }
   if (window.fetch && method == 'fetch') {
     let requestConfig = {
@@ -33,8 +37,10 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
       method: type,
       headers: {
         'Accept': 'application/json',
-        "Content-type":"application/x-www-form-urlencoded;charset=UTF-8"
+        "Content-type":"application/x-www-form-urlencoded;charset=UTF-8",
+        "token": "111"
       },
+
       mode: "cors",
       cache: "force-cache",
     }
