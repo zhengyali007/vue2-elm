@@ -33,6 +33,9 @@
           </section>
         </li>
       </ul>
+      <div class="btn-container">
+        <button>添加新邮筒</button>
+      </div>
       <aside class="return_top" @click="backTop" v-if="showBackStatus">
         <svg class="back_top_svg">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
@@ -41,8 +44,6 @@
     </div>
     <div class="location" v-else>
     </div>
-
-
     <transition name="loading">
       <loading v-show="showLoading"></loading>
     </transition>
@@ -355,6 +356,27 @@
     .back_top_svg{
       @include wh(1.5rem, 1.5rem);
     }
+  }
+
+  .btn-container {
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+  }
+
+  .btn-container button{
+    position: absolute;
+    background-color: #007aff;
+    color: #fff;
+    width: 80%;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    top:10px;
+    margin-left: 10%;
+    border-radius: 5px;
   }
 
 
