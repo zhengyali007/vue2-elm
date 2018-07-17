@@ -21,7 +21,7 @@ module.exports = {
       // imagepath: 'http://osscdn.futurecommunity.cn',  //图片地址
         loginUrl:'/?#/postLogin', //登录页地址
         wxappid:'wxa2a065662559a875', //微信appid
-        serverName:'smartPostBox',
+        serverName:'smartPostBox/a',
         filterUrl:[],
         ordinaryUserWhiteList:[],
     },
@@ -46,7 +46,7 @@ module.exports = {
             '/payapi',
             '/img',
         ],
-        proxypath: 'http://post.clutek.com:10157',
+        proxypath: 'http://www.clutek.com',
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README
         // (https://github.com/webpack/css-loader#sourcemaps)
