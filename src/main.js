@@ -17,23 +17,6 @@ if ('addEventListener' in document) {
     }, false);
 }
 
-function inArray(arr, item) {
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i] == item) {
-      return true;
-    }
-  }
-  return false;
-};
-
-function is_weixin(){
-  var ua = navigator.userAgent.toLowerCase();
-  if(ua.match(/MicroMessenger/i)=="micromessenger") {
-    return true;
-  } else {
-    return false;
-  }
-}
 
 
 
@@ -56,10 +39,28 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-  console.log(window.location.href)
+  // console.log(window.location.href)
   // next();
-  window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ appid +"&redirect_uri="+ weiXinUrl +"%2f"+ serverName+"%2fwx%2fverificationUser&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
-  console.log(window.location.href)
+  //全局拦截器的
+  if (to.meta.login) {  // 判断该路由是否需要登录权限
+    // if (getLogin().name && getLogin().phone) {  // 通过store获取当前的token是否存在
+    //   next();
+    console.log(222)
+    localStorage.setItem('lastUrl',to.fullPath)
+    next({
+      path: '/postLogin',
+    })
+    }
+    else {
+    next();
+      // MessageBox.alert('未登录，请先登录').then(()=>{ //promise
+      //   next({
+      //     path: '/login',
+      //     query: { redirect: to.fullPath }  // 将跳转的路由path作为参数，登录成功后跳转到该路由
+      //   })
+      // })
+    }
+
 })
 
 new Vue({
