@@ -5,6 +5,7 @@ import store from './store/'
 import {routerMode} from './config/env'
 import './config/rem'
 import FastClick from 'fastclick'
+import {appid,weiXinUrl,serverName,filterUrl,ordinaryUserWhiteList} from 'src/service/getData'
 
 import Mint from 'mint-ui';
 Vue.use(Mint);
@@ -53,13 +54,11 @@ const router = new VueRouter({
 	}
 })
 
-let baseUrl = "http://www.clutek.com"
-let weiXinUrl=encodeURIComponent(baseUrl);
 
 router.beforeEach((to, from, next) => {
   console.log(window.location.href)
-  next();
-  // window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa2a065662559a875&redirect_uri="+ weiXinUrl +"%2fsmartPostBox%2fwx%2fverificationUser&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+  // next();
+  window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ appid +"&redirect_uri="+ weiXinUrl +"%2f"+ serverName+"%2fwx%2fverificationUser&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
   console.log(window.location.href)
 })
 

@@ -1,5 +1,21 @@
 import fetch from '../config/fetch'
 import {getStore} from '../config/mUtils'
+import { baseUrl,wxAppid,appServerName,appFilterUrl,appOrdinaryUserWhiteList}  from '../config/env'
+
+
+
+//图片验证码地址
+let serverUrl= baseUrl;
+//微信获取openid回调地址
+let weiXinUrl=encodeURIComponent(baseUrl);
+//微信appid
+let appid = wxAppid; //wxdaaa62c85ae9cec9   wx4bad669248734958
+
+let serverName = appServerName;
+
+let filterUrl = appFilterUrl ;
+
+let ordinaryUserWhiteList = appOrdinaryUserWhiteList;
 
 /**
  * 获取首页默认地址
@@ -10,7 +26,13 @@ var cityGuess = (id) => fetch('GET','/smartPostBox/wx/postMan', {
 });
 
 export {
-  cityGuess
+  cityGuess,
+  serverUrl,
+  weiXinUrl,
+  appid,
+  serverName,
+  filterUrl,
+  ordinaryUserWhiteList
 };
 
 

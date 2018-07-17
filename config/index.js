@@ -15,7 +15,15 @@ module.exports = {
         // Before setting to `true`, make sure to:
         // npm install --save-dev compression-webpack-plugin
         productionGzip: false,
-        productionGzipExtensions: ['js', 'css']
+        productionGzipExtensions: ['js', 'css'],
+        proxypath: 'http://www.clutek.com', //服务端地址
+        frontpath: 'http://192.168.1.9:8000',//前端地址
+      // imagepath: 'http://osscdn.futurecommunity.cn',  //图片地址
+        loginUrl:'/?#/postLogin', //登录页地址
+        wxappid:'wxa2a065662559a875', //微信appid
+        serverName:'smartPostBox',
+        filterUrl:[],
+        ordinaryUserWhiteList:[],
     },
     dev: {
         env: {
@@ -38,7 +46,7 @@ module.exports = {
             '/payapi',
             '/img',
         ],
-        proxypath: 'http://192.168.1.245:8081',
+        proxypath: 'http://post.clutek.com:10157',
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README
         // (https://github.com/webpack/css-loader#sourcemaps)

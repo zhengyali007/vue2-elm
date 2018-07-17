@@ -8,22 +8,32 @@
  */
 
 var config = require('../../config')
-let baseUrl = '';
-let routerMode = 'hash';
-let imgBaseUrl = '';
-
+let baseUrl;
+let routerMode;
+let loginUrl;
+const wxAppid = config.build.wxappid;
+const appServerName = config.build.serverName;
+const appFilterUrl = config.build.filterUrl;
+const appOrdinaryUserWhiteList = config.build.ordinaryUserWhiteList;
+// const imgBaseUrl = config.build.imagepath;
 
 if (process.env.NODE_ENV == 'development') {
   baseUrl = config.dev.proxypath,
     routerMode = 'hash'
-
-}else if(process.env.NODE_ENV == 'production'){
-  baseUrl = config.dev.proxypath,
+}else{
+  baseUrl = config.build.proxypath,
     routerMode = 'hash'
 }
+
+loginUrl =  config.build.frontpath + config.build.loginUrl;
 
 export {
 	baseUrl,
 	routerMode,
-	imgBaseUrl,
+  wxAppid,
+  appServerName,
+  appFilterUrl,
+  appOrdinaryUserWhiteList,
+  loginUrl
+	// imgBaseUrl,
 }
