@@ -6,35 +6,39 @@
     </mt-navbar>
     <div class="list" v-if="selected === '1'">
       <div class="sort">
-        <div class="sort-title" @click="changeSort">信件量：
+        <div class="sort-title" @click="changeSort" v-show="breakStatus">信件量：
           <img v-show="active" class="sort-control" src="../../images/postDesc.png"/>
           <img v-show="!active" class="sort-control" src="../../images/postAsc.png"/>
         </div>
         <!--<label class="sort-control" :class = "{ sorted: active}" @click="descending">由高到低</label>-->
         <!--<label class="sort-control sort2" :class = "{ sorted: !active}" @click="ascending">由低到高</label>-->
-        <button class="break">只看故障邮筒</button>
+        <button class="break" @click="checkBreak" v-show="breakStatus">只看故障邮筒</button>
+        <button class="break" @click="checkAll" v-show="!breakStatus">查看全部邮筒</button>
       </div>
       <ul v-load-more="loaderMore" class="mail-list">
         <li v-for="item in numbers">
           <section class="mail-box-list">
             <img class="list-img" src="../../images/postBox.png"/>
-            <label class="list-no">{{item.number}}</label>
+            <label class="list-no">{{item.deviceNo}}</label>
             <div class="list-letter">
               <img src="../../images/postLetters.png"/>
-              <label>{{ item.letterNo }}</label>
+              <label>{{ item.awaitingPickupQuantity }}</label>
             </div>
-            <div class="low-elec" v-if="item.status === 2">
-              <img src="../../images/postLow.png"/>
-            </div>
-            <div class="low-elec" v-if="item.status === 3">
-              <img src="../../images/postBreak2.png"/>
-            </div>
-            <button @click="checkDetails">查看详情</button>
+            <label class="elc">电量：{{ item.surplusBattery }}</label>
+            <label class="if-normal" v-if="item.deviceStatus === '2'" style="color: #007aff;">正常</label>
+            <label class="if-normal" v-if="item.deviceStatus === '1'" style="color: cadetblue;">待安装</label>
+            <label class="if-normal" v-if="item.deviceStatus === '3'">离线</label>
+            <label class="if-normal" v-if="item.deviceStatus === '4'" style="color: red;">维修</label>
+            <label class="if-normal" v-if="item.deviceStatus === '5'">报废</label>
+            <!--<div class="low-elec" v-if="item.deviceStatus === 2">-->
+              <!--正常-->
+            <!--</div>-->
+            <button @click="checkDetails(item.id)">查看详情</button>
           </section>
         </li>
       </ul>
       <div class="btn-container">
-        <button>添加新邮筒</button>
+        <button @click="addMailBox">添加新邮筒</button>
       </div>
       <aside class="return_top" @click="backTop" v-if="showBackStatus">
         <svg class="back_top_svg">
@@ -56,7 +60,7 @@
   import {loadMore} from 'src/components/common/mixin'
   import {animate} from 'src/config/mUtils'
   import loading from 'src/components/common/loading'
-  import {getMailBoxList} from  'src/service/getData'
+  import {getMyMailList,getBreakMailBox} from  'src/service/getData'
 
   export default {
     components: {
@@ -65,54 +69,16 @@
     mixins: [loadMore],
     data() {
       return {
+        page: '1',
+        limit: '10',
+        orderStatus: 2,
         selected: '1',
         active: true,//调整升序降序
         showLoading: false,// 展示loading图标
         showBackStatus: false,// 展示"回到顶部"图标
         asc: true,// 升序降序请求标识，控制加载更多请求数据
-        //邮箱列表数据
-        numbers: [
-          {
-            number: 'MB000000000001',
-            letterNo: 96,
-            status: 1
-          },
-          {
-            number: 'MB000000000089',
-            letterNo: 90,
-            status: 2
-          },
-          {
-            number: 'MB000000000096',
-            letterNo: 80,
-            status: 1
-          },
-          {
-            number: 'MB000000000045',
-            letterNo: 65,
-            status: 2
-          },
-          {
-            number: 'MB000000000005',
-            letterNo: 54,
-            status: 3
-          },
-          {
-            number: 'MB000000000079',
-            letterNo: 37,
-            status: 1
-          },
-          {
-            number: 'MB000000000017',
-            letterNo: 36,
-            status: 3
-          },
-          {
-            number: 'MB000000000028',
-            letterNo: 19,
-            status: 1
-          },
-        ]
+        numbers: [],
+        breakStatus: true
       }
     },
     watch: {
@@ -127,26 +93,54 @@
     methods: {
       //获取数据
       async getList(){
-        var id = 'be5a6278a1dd4a3684ddf6895a86f780';
+        // var id = '1004';
         // alert(1)
-        var myMail = await getMailBoxList(id);
-        var test = myMail.headers.get('content-type')
-        console.log(test)
+        var myMail = await getMyMailList(this.page,this.limit,this.orderStatus);
+        // var test = myMail.headers.get('content-type')
+        console.log(myMail)
         // alert(2)
-        if(myMail.status == 200){
-          this.numbers = myMail.data;
+        if(myMail.errorCode === "200"){
+          this.numbers = myMail.body.mailbox;
         }else{
           this.numbers==null;
         }
         this.showLoading=false;
       },
+      // 只看故障邮筒
+      async checkBreak() {
+        this.breakStatus = false;
+        var id = 1004;
+        var breakBox = await getBreakMailBox(id,this.page,this.limit)
+        console.log(breakBox)
+        var res =  breakBox.body.mailboxFault
+        if(breakBox.errorCode === "200"){
+          this.numbers= res
+          console.log(res)
+          console.log(this.numbers)
+        }
+      },
+      checkAll() {
+        this.breakStatus = true;
+        this.getList();
+      },
       //查看详情
-      checkDetails() {
-        this.$router.push({path: '/mailBoxDetail'})
+      checkDetails(id) {
+        console.log(id)
+        this.$router.push({path: '/mailBoxDetail',query: {id: id}})
       },
       //改变排序方式
       changeSort() {
         this.active = !this.active
+        if(this.orderStatus === 1){
+          this.orderStatus =2
+        }else {
+          this.orderStatus =1
+        }
+        this.getList(this.page,this.limit,this.orderStatus)
+      },
+      // 添加新邮筒
+      addMailBox() {
+        this.$router.push({path: '/addMailBox'})
       },
       //到达底部加载更多数据
       async loaderMore() {
@@ -303,7 +297,8 @@
     left: 80px;
     height: 30px;
     line-height: 30px;
-    top: 5px
+    top: 5px;
+    font-size: 16px;
   }
 
   .list-letter {
@@ -328,6 +323,22 @@
     line-height: 16px;
     top: 0px;
     color: #007aff;
+  }
+
+  .elc {
+    position: absolute;
+    height: 20px;
+    left: 55%;
+    bottom: 3px;
+    font-size: 12px;
+  }
+
+  .if-normal {
+    position: absolute;
+    height: 20px;
+    left: 38%;
+    bottom: 3px;
+    font-size: 12px;
   }
 
   .low-elec {

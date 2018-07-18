@@ -4,17 +4,17 @@
       <li v-for="item in numbers">
         <section class="list">
           <img src="../../images/postBox.png"/>
-          <label class="number">{{item.number}}</label>
-          <button @click="checkDetails">查看详情</button>
-          <div class="attendance-status" v-if="item.status === 1">
+          <label class="number">{{item.mailboxDeviceId}}</label>
+          <button @click="checkDetails(item.id)">查看详情</button>
+          <div class="attendance-status" v-if="item.status === '1'">
             <img src="../../images/post_a1.png"/>
             <label>正常</label>
           </div>
-          <div class="attendance-status" v-if="item.status === 2">
+          <div class="attendance-status" v-if="item.status === '2'">
             <img src="../../images/post_a2.png"/>
             <label>迟开</label>
           </div>
-          <div class="attendance-status" v-if="item.status === 3">
+          <div class="attendance-status" v-if="item.status === '3'">
             <img src="../../images/post_a3.png"/>
             <label>未开</label>
           </div>
@@ -28,6 +28,7 @@
   import {loadMore} from 'src/components/common/mixin'
   import {animate} from 'src/config/mUtils'
   import loading from 'src/components/common/loading'
+  import {getAttendanceList} from "../../service/getData";
 
   export default {
     components: { loading },
@@ -36,46 +37,28 @@
       return {
         loading: true,
         //邮箱编号列表
-        numbers: [
-          {
-            number: 'MB00000000000001',
-            status: 1
-          },
-          {
-            number: 'MB00000000000002',
-            status: 2
-          },
-          {
-            number: 'MB00000000000003',
-            status: 1
-          },
-          {
-            number: 'MB00000000000004',
-            status: 3
-          },
-          {
-            number: 'MB00000000000005',
-            status: 2
-          }, {
-            number: 'MB00000000000006',
-            status: 3
-          }, {
-            number: 'MB000000000000007',
-            status: 1
-          }, {
-            number: 'MB000000000000008',
-            status: 1
-          },
-        ]
+        numbers: [],
+        page: 1,
+        limit: 10,
       }
     },
-    mounted() {},
+    mounted() {
+      this.getList()
+    },
     methods: {
       //获取考勤列表
-
+      async getList() {
+        var id = 1004;
+        var attendanceList = await getAttendanceList(id,this.page,this.limit)
+        console.log(attendanceList)
+        var res = attendanceList.body.listAttendance
+        if (attendanceList.errorCode === "200"){
+          this.numbers =res
+        }
+      },
       //查看详情
-      checkDetails() {
-        this.$router.push({path: '/attendanceDetails'})
+      checkDetails(id) {
+        this.$router.push({path: '/attendanceDetails',query: {id:id}})
       }
     },
   }
@@ -113,7 +96,8 @@
     left: 60px;
     height: 30px;
     line-height: 30px;
-    top: 5px
+    top: 5px;
+    font-size: 16px;
   }
 
   .list button {

@@ -47,7 +47,11 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
     try {
       var response = await fetch(url, requestConfig);
       if (response.status=='601'){
-        window.localStorage.removeItem("token");
+        // alert(1)
+        // console.log(this.$router.path)
+        // localStorage.setItem('lastUrl',this.$route.path)
+        // console.log(localStorage.getItem('lastUrl'))
+        // window.localStorage.removeItem("token");
         window.location.href=loginUrl;
         return {"status":"400","message":"参数错误,重新登录"};
       }

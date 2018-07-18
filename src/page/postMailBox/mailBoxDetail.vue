@@ -1,10 +1,15 @@
 <template>
   <div id="mail-box-detail">
-    <mt-cell title="邮筒编号：" value="MB000000000000001"></mt-cell>
-    <mt-cell title="设备状态：" value="故障"></mt-cell>
-    <mt-cell title="设备电量：" value="50%"></mt-cell>
-    <mt-cell title="当前信件量：" value="10"></mt-cell>
-    <mt-cell title="邮筒所处位置：">
+    <section class="detail-title">邮筒详情</section>
+    <mt-cell title="邮筒编号：" :value="deviceNo"></mt-cell>
+    <mt-cell title="设备状态：" value="待安装" v-if="deviceStatus === '1'"></mt-cell>
+    <mt-cell title="设备状态：" value="正常" v-if="deviceStatus === '2'"></mt-cell>
+    <mt-cell title="设备状态：" value="离线" v-if="deviceStatus === '3'"></mt-cell>
+    <mt-cell title="设备状态：" value="维修" v-if="deviceStatus === '4'"></mt-cell>
+    <mt-cell title="设备状态：" value="报废" v-if="deviceStatus === '5'"></mt-cell>
+    <mt-cell title="设备电量：" :value="surplusBattery"></mt-cell>
+    <mt-cell title="当前信件量：" :value="awaitingPickupQuantity"></mt-cell>
+    <mt-cell title="邮筒所处位置：" :value="address">
 
     </mt-cell>
   </div>
@@ -12,16 +17,40 @@
 
 <script>
   import { Cell} from 'mint-ui';
+  import {getMailDetail} from "../../service/getData";
 
   export default {
     components: {
       Cell
     },
     data() {
-      return {}
+      return {
+        deviceNo: '',
+        awaitingPickupQuantity: '',
+        address: '',
+        deviceStatus: '',
+        surplusBattery: '',
+      }
     },
-    mounted() {},
-    methods: {},
+    mounted() {
+      this.getDetail()
+    },
+    methods: {
+      async getDetail() {
+        var id = this.$route.query.id
+        var myMail = await getMailDetail(id);
+        console.log(myMail)
+        var response = myMail.body.listMailboxById
+        if (myMail.errCode === "200"){
+          console.log(response)
+          this.address = response.address
+          this.awaitingPickupQuantity = response.awaitingPickupQuantity
+          this.deviceNo = response.deviceNo
+          this.deviceStatus = response.deviceStatus
+          this.surplusBattery = response.surplusBattery
+        }
+      }
+    },
   }
 </script>
 
@@ -41,6 +70,17 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
+  }
+
+  .detail-title {
+    position: relative;
+    background-color: #f3f3f3;
+    color: #007aff;
+    text-align: center;
+    height: 40px;
+    line-height: 30px;
+    padding-top: 5px;
+    font-size: 16px;
   }
 
   .box-detail {

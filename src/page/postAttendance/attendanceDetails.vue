@@ -1,5 +1,6 @@
 <template>
   <div id="attendance-details">
+    <section class="attendance-title">考勤详情</section>
     <div class="details">
       <mt-cell title="邮筒编号：" value="MB000000000000001"></mt-cell>
       <mt-cell title="规定开箱时间：" value="08：00"></mt-cell>
@@ -12,6 +13,8 @@
 
 <script>
   import { Cell} from 'mint-ui';
+  import {getAttendanceDetail} from "../../service/getData";
+
   export default {
     components: {
        Cell
@@ -19,8 +22,16 @@
     data() {
       return {}
     },
-    mounted() {},
-    methods: {},
+    mounted() {
+      this.getDetail()
+    },
+    methods: {
+      async getDetail() {
+        var id = this.$route.query.id;
+        var detail = await getAttendanceDetail(id)
+        console.log(detail)
+      }
+    },
   }
 </script>
 
@@ -40,6 +51,17 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
+  }
+
+  .attendance-title {
+    position: relative;
+    background-color: #f3f3f3;
+    color: #007aff;
+    text-align: center;
+    height: 40px;
+    line-height: 30px;
+    padding-top: 5px;
+    font-size: 16px;
   }
 
   .details {

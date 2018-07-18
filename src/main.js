@@ -45,6 +45,7 @@ router.beforeEach((to, from, next) => {
     if (localStorage.getItem('token')) {  // 判断是否有token
       next();
     }else {
+      console.log(to.fullPath)
       localStorage.setItem('lastUrl', to.fullPath)
       next({
         path: '/postLogin',
