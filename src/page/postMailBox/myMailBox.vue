@@ -14,7 +14,7 @@
         <!--<label class="sort-control sort2" :class = "{ sorted: !active}" @click="ascending">由低到高</label>-->
         <button class="break">只看故障邮筒</button>
       </div>
-      <ul v-load-more="loaderMore">
+      <ul v-load-more="loaderMore" class="mail-list">
         <li v-for="item in numbers">
           <section class="mail-box-list">
             <img class="list-img" src="../../images/postBox.png"/>
@@ -238,6 +238,11 @@
   }
 
   .list {
+  }
+
+  .mail-list {
+    /*position: relative;*/
+    margin-bottom: 60px;
   }
 
   .sort {

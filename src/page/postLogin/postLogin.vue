@@ -61,7 +61,14 @@
           console.log(12327,this.$route.query.token)
           this.lastUrl = localStorage.getItem('lastUrl')
           localStorage.removeItem('lastUrl')
-          this.$router.push({path: this.lastUrl})
+          console.log(this.lastUrl === '/postLogin')
+          console.log(this.lastUrl)
+          if (this.lastUrl === '/postLogin'){
+            this.$router.push({path: '/postProfile'})
+          }else {
+            console.log(this.lastUrl)
+            this.$router.push({path: this.lastUrl})
+          }
         }else if(!this.$route.query.openid){
           //路由上没有openid，跳转到后端方法获取openid
           window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ appid +"&redirect_uri="+ weiXinUrl +"%2f"+ serverName+"%2fwx%2fverificationUser&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"

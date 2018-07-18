@@ -1,7 +1,7 @@
 <template>
   <div id="test">
     <div class="btn-container">
-      <button @click="toLogin">账号绑定</button>
+      <button @click="toProfile">个人中心</button>
       <br>
       <button @click="toList">我的邮筒</button>
       <br>
@@ -19,8 +19,8 @@
     },
     mounted() {},
     methods: {
-      toLogin() {
-        this.$router.push({path: '/postLogin'})
+      toProfile() {
+        this.$router.push({path: '/postProfile'})
       },
       toList() {
         this.$router.push({path: '/myMailBox'})

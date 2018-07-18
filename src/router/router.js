@@ -5,6 +5,8 @@ const test = r => require.ensure([],() => r(require('../page/postLogin/test')),'
 const postLogin = r => require.ensure([],() => r(require('../page/postLogin/postLogin')),'postLogin')
 //个人信息
 const postProfile = r => require.ensure([],() => r(require('../page/postProfile/postProfile')),'postProfile')
+// 修改绑定手机号
+const changePhone = r => require.ensure([],() => r(require('../page/postProfile/changePhone')),'changePhone')
 //我管理的邮筒
 const myMailBox = r => require.ensure([],() => r(require('../page/postMailBox/myMailBox')),'myMailBox')
 //邮筒详情
@@ -37,20 +39,36 @@ export default [{
       }
     },
     {
+      path: '/changePhone',
+      component: changePhone,
+    },
+    {
       path: '/myMailBox',
-      component: myMailBox
+      component: myMailBox,
+      meta: {
+        login: true
+      }
     },
     {
       path: '/mailBoxDetail',
-      component: mailBoxDetail
+      component: mailBoxDetail,
+      meta: {
+        login: true
+      }
     },
     {
       path: '/attendanceList',
-      component: attendanceList
+      component: attendanceList,
+      meta: {
+        login: true
+      }
     },
     {
       path: '/attendanceDetails',
-      component: attendanceDetails
+      component: attendanceDetails,
+      meta: {
+        login: true
+      }
     },
 
 

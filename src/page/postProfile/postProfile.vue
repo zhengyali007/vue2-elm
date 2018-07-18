@@ -4,6 +4,11 @@
     <mt-cell title="姓名：">
       <input type="text" placeholder="请输入真实姓名"/>
     </mt-cell>
+    <mt-cell title="手机号码：">
+      <!--<input type="text" placeholder="请输入真实姓名"/>-->
+      <label>15655376973</label>
+      <button class="change-number" @click="changePhone">变更</button>
+    </mt-cell>
     <mt-cell title="身份证号：">
       <input type="text" placeholder="请输入身份证号"/>
     </mt-cell>
@@ -25,7 +30,8 @@
       <input type="text" placeholder="请输入专业"/>
     </mt-cell>
     <div class="btn-container">
-      <button @click="saveProfile">保存</button>
+      <button @click="saveProfile" class="save">保存</button>
+      <button @click="unBind" class="un-bind">解除绑定</button>
     </div>
 
   </div>
@@ -54,8 +60,16 @@
         this.sex = 2
         console.log(this.sex)
       },
+      //修改绑定手机号
+      changePhone() {
+        this.$router.push({path:'/changePhone'})
+      },
       saveProfile() {
         this.$router.push({path:'/myMailBox'})
+      },
+    //  解除绑定
+      unBind() {
+        // 调取接口解除绑定并跳转至登录页面
       }
     },
   }
@@ -83,12 +97,21 @@
   .profile-title {
     position: relative;
     background-color: #f3f3f3;
-    /*color: #fff;*/
+    color: #007aff;
     text-align: center;
     height: 40px;
     line-height: 30px;
     padding-top: 5px;
     font-size: 18px;
+  }
+
+  .change-number {
+    position: relative;
+    outline: none;
+    border: none;
+    background-color: #fff;
+    color: #007aff;
+    width:60px;
   }
 
   .single {
@@ -97,13 +120,9 @@
   }
 
 
-
-
-
   .btn-container {
     /*background-color: #fff3e1;*/
     position: relative;
-    margin-top: 10px;
     height: 30px;
     text-align: center;
     margin-top: 30px;
@@ -111,12 +130,21 @@
 
   .btn-container button {
     position: relative;
+    display: inline-block;
     height: 30px;
-    background-color: #007aff;
     color: #fff;
-    width: 80%;
+    width: 40%;
     border-radius: 5px;
     font-size: 16px;
+    margin: 5px;
+  }
+
+  .save {
+    background-color: #007aff;
+  }
+
+  .un-bind {
+    background-color: red;
   }
 
   input[type=radio] {
