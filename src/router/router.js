@@ -10,7 +10,7 @@ const myMailBox = r => require.ensure([],() => r(require('../page/postMailBox/my
 //邮筒详情
 const mailBoxDetail = r => require.ensure([],() => r(require('../page/postMailBox/mailBoxDetail')),'mailBoxDetail')
 // 添加我的邮筒（邮筒绑定）
-const addMailBox = r => require.ensure([],() => r(require('../page/postMailBox/addMailBox')),'addMailBox')
+// const addMailBox = r => require.ensure([],() => r(require('../page/postMailBox/addMailBox')),'addMailBox')
 //考勤信息
 const attendanceList = r => require.ensure([],() => r(require('../page/postAttendance/attendanceList')),'attendanceList')
 //考勤详情

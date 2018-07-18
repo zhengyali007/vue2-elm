@@ -24,7 +24,6 @@ let ordinaryUserWhiteList = appOrdinaryUserWhiteList;
 // 获取验证码
   var getAuthCode = (phone) => fetch('POST','/'+serverName+'/wx/smsCode',{
       phone: phone,
-      // token: '1111'
 });
 
 //  绑定账号

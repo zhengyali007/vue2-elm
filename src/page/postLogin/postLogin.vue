@@ -56,7 +56,7 @@
         if (this.$route.query.token){
           // $.cookie("token","this.$route.query.token")
           // 返回token直接登录跳转至页面
-          localStorage.setItem('token','111111')
+          localStorage.setItem('token',this.$route.query.token)
           // document.cookie = "token=" +this.$route.query.token
           console.log(12327,this.$route.query.token)
           this.lastUrl = localStorage.getItem('lastUrl')
@@ -74,26 +74,25 @@
       },
     //  获取验证码
       async getCode () {
-        let url = 'http://www.clutek.com/smartPostBox/a/wx/smsCode';
-        let formData = new FormData();
-        formData.append('phone','18119606121')
-        formData.append('token','test')
-        fetch(url, {
-          method: 'POST',
-          headers: new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
-          }),
-          body: formData,
-      })
-          .then((res)=>{
-            console.log(res)
-            return res.text()
-          })
-          .then((res)=>{
-            console.log(res)
-          })
-        /*try {
-          document.cookie = "token=3423423";
+      //   let url = 'http://www.clutek.com/smartPostBox/a/wx/smsCode';
+      //   let formData = new FormData();
+      //   formData.append('phone','18119606121')
+      //   formData.append('token','test')
+      //   fetch(url, {
+      //     method: 'POST',
+      //     headers: new Headers({
+      //       'Content-Type': 'application/x-www-form-urlencoded' // 指定提交方式为表单提交
+      //     }),
+      //     body: formData,
+      // })
+      //     .then((res)=>{
+      //       console.log(res)
+      //       return res.text()
+      //     })
+      //     .then((res)=>{
+      //       console.log(res)
+      //     })
+        try {
           let response = await getAuthCode(this.phoneNumber);
           console.log('response:',response);
           if (response.errorCode==200) {
@@ -118,7 +117,7 @@
           }
         }catch(error){
           console.log(error)
-        }*/
+        }
       },
     //  绑定
      async bind () {
