@@ -51,7 +51,7 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
         // console.log(this.$router.path)
         // localStorage.setItem('lastUrl',this.$route.path)
         // console.log(localStorage.getItem('lastUrl'))
-        // window.localStorage.removeItem("token");
+        window.localStorage.removeItem("token");
         window.location.href=loginUrl;
         return {"status":"400","message":"参数错误,重新登录"};
       }

@@ -1,6 +1,6 @@
 <template>
   <div id="addMailBox">
-    <section class="add-title">添加邮筒</section>
+    <section class="add-title">绑定邮筒</section>
     <mt-cell title="邮筒编号：">
       <input type="text" placeholder="请输入邮筒编号"/>
     </mt-cell>
@@ -27,7 +27,7 @@
         </div>
     </mt-cell>
     <button class="add" @click="addBox">
-      添加
+      绑定
     </button>
   </div>
 </template>

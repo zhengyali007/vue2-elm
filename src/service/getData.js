@@ -33,7 +33,7 @@ var bindingUser = (phone, smsCode, openid) => fetch('POST', '/' + serverName + '
 });
 
 //  获取我的邮筒列表
-var getMyMailList = (page,limit,orderStatus) => fetch('GET', '/' + serverName + '/wx/mailbox/1004', {
+var getMyMailList = (page,limit,orderStatus) => fetch('GET', '/' + serverName + '/wx/mailbox', {
   // id: id,
   page:page,
   limit:limit,
@@ -47,14 +47,14 @@ var getMailDetail = (id) => fetch('GET', '/' + serverName + '/wx//listMailboxByI
 });
 
 //  查看故障邮筒
-var getBreakMailBox = (id,page,limit) => fetch('GET', '/' + serverName + '/wx/mailboxFault/'+id, {
+var getBreakMailBox = (page,limit) => fetch('GET', '/' + serverName + '/wx/mailboxFault/', {
   page: page,
   limit: limit,
   token: localStorage.getItem('token')
 });
 
 //  获取考勤记录列表
-var getAttendanceList = (id,page,limit) => fetch('GET', '/' + serverName + '/wx/listAttendance/'+id, {
+var getAttendanceList = (page,limit) => fetch('GET', '/' + serverName + '/wx/listAttendance/', {
   page: page,
   limit: limit,
   token: localStorage.getItem('token')
@@ -62,6 +62,20 @@ var getAttendanceList = (id,page,limit) => fetch('GET', '/' + serverName + '/wx/
 
 //  获取考勤记录详情
 var getAttendanceDetail = (id) => fetch('GET', '/' + serverName + '/wx/listAttendanceById/'+id, {
+  token: localStorage.getItem('token')
+});
+
+//  获取个人信息
+var getProfile= () => fetch('GET', '/' + serverName + '/wx/postMan', {
+  token: localStorage.getItem('token')
+});
+
+
+//  保存个人信息
+var saveProfile= (email,year,address) => fetch('GET', '/' + serverName + '/wx/updatePostman', {
+  email:email,
+  year:year,
+  address:address,
   token: localStorage.getItem('token')
 });
 
@@ -74,6 +88,8 @@ export {
   getBreakMailBox,
   getAttendanceList,
   getAttendanceDetail,
+  getProfile,
+  saveProfile,
   serverUrl,
   weiXinUrl,
   appid,

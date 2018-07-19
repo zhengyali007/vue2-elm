@@ -38,7 +38,7 @@
         </li>
       </ul>
       <div class="btn-container">
-        <button @click="addMailBox">添加新邮筒</button>
+        <button @click="addMailBox">绑定新邮筒</button>
       </div>
       <aside class="return_top" @click="backTop" v-if="showBackStatus">
         <svg class="back_top_svg">
@@ -109,8 +109,8 @@
       // 只看故障邮筒
       async checkBreak() {
         this.breakStatus = false;
-        var id = 1004;
-        var breakBox = await getBreakMailBox(id,this.page,this.limit)
+        // var id = 1004;
+        var breakBox = await getBreakMailBox(this.page,this.limit)
         console.log(breakBox)
         var res =  breakBox.body.mailboxFault
         if(breakBox.errorCode === "200"){
@@ -138,7 +138,7 @@
         }
         this.getList(this.page,this.limit,this.orderStatus)
       },
-      // 添加新邮筒
+      // 绑定新邮筒
       addMailBox() {
         this.$router.push({path: '/addMailBox'})
       },

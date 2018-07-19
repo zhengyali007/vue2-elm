@@ -48,8 +48,8 @@
     methods: {
       //获取考勤列表
       async getList() {
-        var id = 1004;
-        var attendanceList = await getAttendanceList(id,this.page,this.limit)
+        // var id = 1004;
+        var attendanceList = await getAttendanceList(this.page,this.limit)
         console.log(attendanceList)
         var res = attendanceList.body.listAttendance
         if (attendanceList.errorCode === "200"){

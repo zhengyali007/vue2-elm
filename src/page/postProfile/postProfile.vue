@@ -2,33 +2,39 @@
   <div id="profile">
     <section class="profile-title">个人信息</section>
     <mt-cell title="姓名：">
-      <input type="text" placeholder="请输入真实姓名"/>
+      <input type="text" placeholder="请输入真实姓名" v-model="name"/>
+    </mt-cell>
+    <mt-cell title="工号:">
+      <input type="text" placeholder="请输入工号" v-model="workNo" disabled/>
+    </mt-cell>
+    <mt-cell title="身份证号：">
+      <input type="text" placeholder="请输入身份证号" v-model="idCard" disabled/>
     </mt-cell>
     <mt-cell title="手机号码：">
       <!--<input type="text" placeholder="请输入真实姓名"/>-->
-      <label>15655376973</label>
+      <label>{{ phone }}</label>
       <button class="change-number" @click="changePhone">变更</button>
     </mt-cell>
-    <mt-cell title="身份证号：">
-      <input type="text" placeholder="请输入身份证号"/>
+    <mt-cell title="邮箱:">
+      <input type="text" placeholder="请输入邮箱" v-model="email"/>
+    </mt-cell>
+    <mt-cell title="工作年限:">
+      <input type="text" placeholder="请输入工作年限" v-model="workedYears"/>
     </mt-cell>
     <mt-cell title="居住地址:">
-      <input type="text" placeholder="请输入居住地址"/>
+      <input type="text" placeholder="请输入地址" v-model="address"/>
     </mt-cell>
-    <mt-cell title="性别:">
-      <label class="single" @click="setSex1"><input type="radio" name="sex" value="male" checked/>男</label>
-      <label class="single" @click="setSex2"><input type="radio" name="sex" value="female"/>女</label>
-      <!--<input type="text" placeholder="请输入性别"/>-->
-    </mt-cell>
-    <mt-cell title="年龄:">
-      <input type="text" placeholder="请输入年龄"/>
-    </mt-cell>
-    <mt-cell title="学历:">
-      <input type="text" placeholder="请输入学历"/>
-    </mt-cell>
-    <mt-cell title="专业:">
-      <input type="text" placeholder="请输入专业"/>
-    </mt-cell>
+    <!--<mt-cell title="性别:">-->
+      <!--<label class="single" @click="setSex1"><input type="radio" name="sex" value="male" checked/>男</label>-->
+      <!--<label class="single" @click="setSex2"><input type="radio" name="sex" value="female"/>女</label>-->
+      <!--&lt;!&ndash;<input type="text" placeholder="请输入性别"/>&ndash;&gt;-->
+    <!--</mt-cell>-->
+    <!--<mt-cell title="学历:">-->
+      <!--<input type="text" placeholder="请输入学历" v-model="education"/>-->
+    <!--</mt-cell>-->
+    <!--<mt-cell title="专业:">-->
+      <!--<input type="text" placeholder="请输入专业" v-model="major"/>-->
+    <!--</mt-cell>-->
     <div class="btn-container">
       <button @click="saveProfile" class="save">保存</button>
       <button @click="unBind" class="un-bind">解除绑定</button>
@@ -39,6 +45,7 @@
 
 <script>
   import {Radio, Cell} from 'mint-ui';
+  import {getProfile ,  saveProfile} from "../../service/getData";
 
   export default {
     components: {
@@ -46,10 +53,19 @@
     },
     data() {
       return {
+        id: '',
         sex: 1,
+        name: '',
+        phone: '',
+        idCard: '',
+        email: '',
+        workNo: '',
+        workedYears: '',
+        address: '',
       }
     },
     mounted() {
+      this.getProfile()
     },
     methods: {
       setSex1() {
@@ -60,12 +76,38 @@
         this.sex = 2
         console.log(this.sex)
       },
+      // 获取个人信息
+      async getProfile() {
+        // var id = 'cbfef88ffd4442bba6cc79b02c186f84';
+        var profile = await getProfile()
+        console.log(profile)
+        if (profile.errorCode === "200"){
+          var res = profile.body.postman;
+          console.log(res.name);
+          this.id = res.id
+          this.name = res.name;
+          this.phone = res.mobile;
+          this.idCard = res.passportNo;
+          this.sex = res.sex;
+          this.email = res.email;
+          this.workNo = res.workNo;
+          this.workedYears = res.workNo;
+          this.address = res.address;
+        }
+      },
       //修改绑定手机号
       changePhone() {
         this.$router.push({path:'/changePhone'})
       },
-      saveProfile() {
-        this.$router.push({path:'/myMailBox'})
+      //保存个人信息
+      async saveProfile() {
+        console.log(this.id,this.email,this.workedYears,this.address)
+        var response = await saveProfile(this.email,this.workedYears,this.address)
+        console.log(response)
+        if(response.errorCode === "200"){
+
+        }
+        // this.$router.push({path:'/myMailBox'})
       },
     //  解除绑定
       unBind() {
@@ -111,12 +153,16 @@
     border: none;
     background-color: #fff;
     color: #007aff;
-    width:60px;
+    width:65px;
   }
 
   .single {
     /*background-color: cadetblue;*/
     margin-right: 40px;
+  }
+
+  .edu {
+
   }
 
 
