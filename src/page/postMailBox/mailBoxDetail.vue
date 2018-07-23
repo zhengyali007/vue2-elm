@@ -1,6 +1,7 @@
 <template>
   <div id="mail-box-detail">
-    <section class="detail-title">邮筒详情</section>
+    <head-top go-back="true" head-title="邮筒详情"></head-top>
+    <!--<section class="detail-title">邮筒详情</section>-->
     <mt-cell title="邮筒编号：" :value="deviceNo"></mt-cell>
     <mt-cell title="设备状态：" value="待安装" v-if="deviceStatus === '1'"></mt-cell>
     <mt-cell title="设备状态：" value="正常" v-if="deviceStatus === '2'"></mt-cell>
@@ -18,10 +19,11 @@
 <script>
   import { Cell} from 'mint-ui';
   import {getMailDetail} from "../../service/getData";
+  import headTop from 'src/components/header/head'
 
   export default {
     components: {
-      Cell
+      Cell,headTop
     },
     data() {
       return {

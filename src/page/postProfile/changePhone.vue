@@ -2,29 +2,76 @@
   <div id="change-phone">
     <section class="change-title">修改手机号</section>
     <mt-cell title="旧手机号：">
-      <input type="text" placeholder="请输入旧手机号码"/>
+      <input type="text" placeholder="请输入旧手机号码" v-model="oldPhone"/>
     </mt-cell>
     <mt-cell title="验证码：">
-      <input type="text" placeholder="请输入验证码"/>
-      <button class="get-code">获取验证码</button>
+      <input class="code-input" type="text" placeholder="请输入验证码" v-model="code"/>
+      <button class="get-code" v-show="codeShow" @click="getCode">获取验证码</button>
+      <button class="timer" v-show="!codeShow">{{count}} s</button>
     </mt-cell>
     <mt-cell title="新手机号：">
-      <input type="text" placeholder="请输入新手机号码"/>
+      <input type="text" placeholder="请输入新手机号码" v-model="newPhone"/>
     </mt-cell>
     <button class="save-phone" @click="savePhone">保存</button>
   </div>
 </template>
 
 <script>
-  import {Cell} from 'mint-ui';
+  import {Cell,Toast} from 'mint-ui';
+  import {getAuthCode,updateMobile} from "../../service/getData";
+
   export default {
-    components: {Cell},
+    components: {Cell,Toast},
     data() {
-      return {}
+      return {
+        count: '',
+        codeShow: true, // 获取验证码
+        timer: null,
+        oldPhone: '',
+        code: '',
+        newPhone: '',
+      }
     },
     mounted() {},
     methods: {
-      savePhone() {
+      async getCode() {
+        try {
+          let response = await getAuthCode(this.oldPhone);
+          console.log('response:',response);
+          if (response.errorCode==200) {
+            if (!this.timer) {
+              this.count = 60;
+              this.codeShow = false;
+              var self = this;
+              this.timer = setInterval(() => {
+                if (self.count > 0 && self.count <= 60) {
+                  self.count--;
+                } else {
+                  self.codeShow = true;
+                  clearInterval(self.timer);
+                  self.timer = null;
+                }
+              }, 1000)
+            }
+          }else if(response.errorCode==402){
+            Toast({
+              message: response.msg,
+              position: 'middle',
+              duration: 2000
+            });
+          }
+        }catch(error){
+          console.log(error)
+        }
+      },
+      async savePhone() {
+        var res = await updateMobile(this.newPhone,this.code)
+        console.log(res)
+        Toast({
+          message: res.msg,
+          position: 'middle',
+          duration: 2000
+        })
         this.$router.push({path: '/postProfile'})
       }
     },
@@ -54,6 +101,12 @@
     font-size: 16px;
   }
 
+  .code-input {
+    position: relative;
+    width:100px;
+    left:20%;
+  }
+
   .get-code {
     position: relative;
     outline: none;
@@ -74,6 +127,16 @@
     margin-left: 10%;
     margin-top: 30px;
     border-radius: 5px;
+  }
+
+  .timer {
+    position: relative;
+    border:none;
+    outline: none;
+    background-color: #fff;
+    color: #555555;
+    width: 80px;
+    /*right: 18px;*/
   }
 
 

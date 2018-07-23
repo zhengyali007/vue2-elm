@@ -5,10 +5,12 @@
       <input type="text" placeholder="请输入真实姓名" v-model="name"/>
     </mt-cell>
     <mt-cell title="工号:">
-      <input type="text" placeholder="请输入工号" v-model="workNo" disabled/>
+      <!--<label>{{ workNo }}</label>-->
+      <input type="text" placeholder="请输入工号" v-model="workNo" disabled style="background-color: #fff"/>
     </mt-cell>
     <mt-cell title="身份证号：">
-      <input type="text" placeholder="请输入身份证号" v-model="idCard" disabled/>
+      <!--<label>{{ idCard }}</label>-->
+      <input type="text" placeholder="请输入身份证号" v-model="idCard" disabled style="background-color: #fff"/>
     </mt-cell>
     <mt-cell title="手机号码：">
       <!--<input type="text" placeholder="请输入真实姓名"/>-->
@@ -122,6 +124,11 @@
         console.log(response)
         if (response.errorCode === '200'){
           localStorage.removeItem('token')
+          Toast({
+            message: '解绑成功',
+            position: 'bottom',
+            duration: 2000
+          });
          window.location.reload()
         }
       }

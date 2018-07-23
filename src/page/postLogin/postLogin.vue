@@ -37,8 +37,8 @@
         codeShow: true, // 获取验证码
         timer: null,
         lastUrl: '',
-        phoneNumber: '18119606121',
-        code: '123456',
+        phoneNumber: '',
+        code: '',
         openid: '',
       }
     },

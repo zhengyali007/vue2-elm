@@ -2,26 +2,20 @@
   <div id="addMailBox">
     <section class="add-title">绑定邮筒</section>
     <mt-cell title="邮筒编号：">
-      <input type="text" placeholder="请输入邮筒编号"/>
+      <input type="text" placeholder="请输入邮筒编号" v-model="deviceNo"/>
     </mt-cell>
     <mt-cell title="邮筒类型：">
       <div class="sel">
-        <select >
-          <option>111</option>
-          <option>22</option>
-          <option>33</option>
-          <option>44</option>
+        <select v-model="selectType">
+          <option v-for="item in type"  :value="item.value">{{ item.label }}</option>
         </select>
         <img src="../../images/xiala.png"/>
       </div>
     </mt-cell>
       <mt-cell title="邮筒地址：">
         <div class="sel">
-          <select >
-            <option>test</option>
-            <option>test</option>
-            <option>33</option>
-            <option>44</option>
+          <select v-model="selectAddress" >
+            <option v-for="item in address"  :value="item.id">{{ item.address }}</option>
           </select>
           <img src="../../images/xiala.png"/>
         </div>
@@ -33,18 +27,66 @@
 </template>
 
 <script>
-  import { Cell} from 'mint-ui';
+  import { Cell,Toast} from 'mint-ui';
+  import {addMailBox,typeAndAddress} from "../../service/getData";
+
   export default {
     components: {
-      Cell
+      Cell,Toast
     },
     data() {
-      return {}
+      return {
+        type:[],
+        address:[],
+        deviceNo:'',
+        selectType: '',
+        selectAddress:'',
+      }
     },
-    mounted() {},
+    mounted() {
+      this.getSelectValue()
+    },
     methods: {
-      addBox() {
-
+      async getSelectValue() {
+        var res = await typeAndAddress()
+        console.log(res)
+        if(res.errorCode === '200'){
+          var type = res.body.deviceType
+          var address = res.body.dutyAddress
+          var typeArr = []
+          for (var i in type) {
+            typeArr.push(type[i])
+          }
+          this.selectType=typeArr[0].value
+          console.log(this.selectType)
+          this.type = typeArr
+          var addressArr = []
+          for (var i in address) {
+            addressArr.push(address[i])
+          }
+          this.address = addressArr
+          // console.log(addressArr[0].id)
+          this.selectAddress=addressArr[0].id
+          console.log(this.selectAddress)
+          this.address = addressArr
+          console.log(this.type,this.address)
+        }
+      },
+     async addBox() {
+        console.log(this.deviceNo,this.selectAddress,this.selectType)
+        var res = await addMailBox(this.deviceNo,this.selectType,this.selectAddress)
+       console.log(res)
+       if (res.errorCode === '200'){
+         Toast({
+           message:'绑定成功'
+         })
+         this.$router.push({path:'/myMailBox'})
+       }
+       if (res.errorCode === '402'){
+         Toast({
+           message:res.msg
+         })
+       }
       }
     },
   }

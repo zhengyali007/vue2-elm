@@ -89,11 +89,27 @@ var saveProfile = (email, workedYears, address) => fetch('GET', '/' + serverName
   token: localStorage.getItem('token')
 });
 
+//获取邮筒类型和地址
+var typeAndAddress = () => fetch('GET', '/' + serverName + '/wx/selectInfo', {
+  token: localStorage.getItem('token')
+});
+
 //  添加邮筒
-var addMailBox = (email, workedYears, address) => fetch('GET', '/' + serverName + '/wx/updatePostman', {
-  email: email,
-  workedYears: workedYears,
-  address: address,
+var addMailBox = (deviceNo, deviceType,dutyAddress) => fetch('GET', '/' + serverName + '/wx/addMailbox', {
+  deviceNo: deviceNo,
+  deviceType: deviceType,
+  dutyAddress: dutyAddress,
+  token: localStorage.getItem('token')
+});
+
+//  变更手机号
+var updateMobile = (phone, code) => fetch('GET', '/' + serverName + '/wx/updateMobile', {
+  phone: phone,
+  code: code,
+  token: localStorage.getItem('token')
+});
+//  邮筒分布
+var allAddress = () => fetch('GET', '/' + serverName + '/wx/mailboxAddress', {
   token: localStorage.getItem('token')
 });
 
@@ -110,6 +126,10 @@ export {
   saveProfile,
   unBind,
   ticket,
+  addMailBox,
+  updateMobile,
+  allAddress,
+  typeAndAddress,
   serverUrl,
   weiXinUrl,
   appid,

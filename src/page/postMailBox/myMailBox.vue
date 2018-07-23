@@ -1,10 +1,10 @@
 <template>
   <div id="my-mail-box">
-    <mt-navbar v-model="selected">
+    <!--<mt-navbar v-model="selected">
       <mt-tab-item id="1">邮筒列表</mt-tab-item>
       <mt-tab-item id="2">邮筒分布</mt-tab-item>
-    </mt-navbar>
-    <div class="list" v-if="selected === '1'">
+    </mt-navbar>-->
+    <div class="list">
       <div class="sort">
         <div class="sort-title" @click="changeSort" v-show="breakStatus">信件量：
           <img v-show="active" class="sort-control" src="../../images/postDesc.png"/>
@@ -15,61 +15,59 @@
         <button class="break" @click="checkBreak" v-show="breakStatus">只看故障邮筒</button>
         <button class="break" @click="checkAll" v-show="!breakStatus">查看全部邮筒</button>
       </div>
-      <ul v-load-more="loaderMore" class="mail-list">
-        <li v-for="item in numbers">
-          <section class="mail-box-list">
-            <img class="list-img" src="../../images/postBox.png"/>
-            <label class="list-no">{{item.deviceNo}}</label>
-            <div class="list-letter">
-              <img src="../../images/postLetters.png"/>
-              <label>{{ item.awaitingPickupQuantity }}</label>
-            </div>
-            <label class="elc">电量：{{ item.surplusBattery }}</label>
-            <label class="if-normal" v-if="item.deviceStatus === '2'" style="color: #007aff;">正常</label>
-            <label class="if-normal" v-if="item.deviceStatus === '1'" style="color: cadetblue;">待安装</label>
-            <label class="if-normal" v-if="item.deviceStatus === '3'">离线</label>
-            <label class="if-normal" v-if="item.deviceStatus === '4'" style="color: red;">维修</label>
-            <label class="if-normal" v-if="item.deviceStatus === '5'">报废</label>
-            <!--<div class="low-elec" v-if="item.deviceStatus === 2">-->
+        <ul v-load-more="loaderMore" class="mail-list" v-show="!empty">
+          <li v-for="item in numbers">
+            <section class="mail-box-list">
+              <img class="list-img" src="../../images/postBox.png"/>
+              <label class="list-no">{{item.deviceNo}}</label>
+              <div class="list-letter">
+                <img src="../../images/postLetters.png"/>
+                <label>{{ item.awaitingPickupQuantity }}</label>
+              </div>
+              <label class="elc">电量：{{ item.surplusBattery }}</label>
+              <label class="if-normal" v-if="item.deviceStatus === '2'" style="color: #007aff;">正常</label>
+              <label class="if-normal" v-if="item.deviceStatus === '1'" style="color: cadetblue;">待安装</label>
+              <label class="if-normal" v-if="item.deviceStatus === '3'">离线</label>
+              <label class="if-normal" v-if="item.deviceStatus === '4'" style="color: red;">维修</label>
+              <label class="if-normal" v-if="item.deviceStatus === '5'">报废</label>
+              <!--<div class="low-elec" v-if="item.deviceStatus === 2">-->
               <!--正常-->
-            <!--</div>-->
-            <button @click="checkDetails(item.id)">查看详情</button>
-          </section>
-        </li>
-      </ul>
-      <div class="btn-container">
-        <button @click="addMailBox">绑定新邮筒</button>
-      </div>
-      <aside class="return_top" @click="backTop" v-if="showBackStatus">
-        <svg class="back_top_svg">
-          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
-        </svg>
-      </aside>
-    </div>
-    <div class="location" v-else>
-      <div id="map" ref="map">
-
+              <!--</div>-->
+              <button @click="checkDetails(item.id)">查看详情</button>
+            </section>
+          </li>
+        </ul>
+        <div v-show="empty" class="empty">暂无数据</div>
+        <div class="btn-container">
+          <button @click="addMailBox">绑定新邮筒</button>
+          <button @click="getMap" style="margin-left: 53%">邮筒分布</button>
+        </div>
+        <aside class="return_top" @click="backTop" v-if="showBackStatus">
+          <svg class="back_top_svg">
+            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#backtop"></use>
+          </svg>
+        </aside>
       </div>
       <!--<button @click="getMap">查看地图</button>-->
+      <!--</div>-->
+      <transition name="loading">
+        <loading v-show="showLoading"></loading>
+      </transition>
     </div>
-    <transition name="loading">
-      <loading v-show="showLoading"></loading>
-    </transition>
-  </div>
 </template>
 
 <script>
-  import {Navbar, TabItem} from 'mint-ui';
+  import {Toast} from 'mint-ui';
   import wx from 'weixin-js-sdk'
   import {loadMore} from 'src/components/common/mixin'
   import {animate} from 'src/config/mUtils'
   import loading from 'src/components/common/loading'
-  import {getMyMailList,getBreakMailBox,ticket} from  'src/service/getData'
+  import {getMyMailList, getBreakMailBox, ticket,allAddress} from 'src/service/getData'
   import {appid} from "../../service/getData";
 
   export default {
     components: {
-      Navbar, TabItem, loading
+      Toast,loading
     },
     mixins: [loadMore],
     data() {
@@ -84,50 +82,58 @@
         asc: true,// 升序降序请求标识，控制加载更多请求数据
         numbers: [],
         breakStatus: true,
-        la:undefined,
-        lo:undefined,
+        empty: false,
       }
     },
     watch: {
       //监听tab切换
-      selected: function () {
-        console.log(this.selected)
-        if (this.selected === '1'){
-          this.getList()
-        }
-        if (this.selected === '2'){
-          this.getMap()
-        }
-      }
+      // selected: function () {
+      //   console.log(this.selected)
+      //   if (this.selected === '1'){
+      //     this.getList()
+      //   }
+      //   if (this.selected === '2'){
+      //     this.getMap()
+      //   }
+      // }
     },
     mounted() {
       this.getList()
       this.getConfig()
+      this.getAddress()
     },
     methods: {
       //获取数据
-      async getList(){
-        var myMail = await getMyMailList(this.page,this.limit,this.orderStatus);
+      async getList() {
+        this.empty = false;
+        var myMail = await getMyMailList(this.page, this.limit, this.orderStatus);
         // var test = myMail.headers.get('content-type')
         console.log(myMail)
         // alert(2)
-        if(myMail.errorCode === "200"){
-          this.numbers = myMail.body.mailbox;
-        }else{
-          this.numbers==null;
+        var res = myMail.body.mailbox
+        if (myMail.errorCode === "200") {
+          if (res.length === 0){
+            this.empty = true;
+          }
+          this.numbers = res;
+        } else {
+          this.numbers == null;
         }
-        this.showLoading=false;
+        this.showLoading = false;
       },
       // 只看故障邮筒
       async checkBreak() {
+        this.empty = false;
         this.breakStatus = false;
         // var id = 1004;
-        var breakBox = await getBreakMailBox(this.page,this.limit)
+        var breakBox = await getBreakMailBox(this.page, this.limit)
         console.log(breakBox)
-        var res =  breakBox.body.mailboxFault
-        if(breakBox.errorCode === "200"){
-          this.numbers= res
-          console.log(res)
+        var res = breakBox.body.mailboxFault
+        if (breakBox.errorCode === "200") {
+          if(res.length === 0){
+            this.empty = true;
+          }
+          this.numbers = res
           console.log(this.numbers)
         }
       },
@@ -138,17 +144,17 @@
       //查看详情
       checkDetails(id) {
         console.log(id)
-        this.$router.push({path: '/mailBoxDetail',query: {id: id}})
+        this.$router.push({path: '/mailBoxDetail', query: {id: id}})
       },
       //改变排序方式
       changeSort() {
         this.active = !this.active
-        if(this.orderStatus === 1){
-          this.orderStatus =2
-        }else {
-          this.orderStatus =1
+        if (this.orderStatus === 1) {
+          this.orderStatus = 2
+        } else {
+          this.orderStatus = 1
         }
-        this.getList(this.page,this.limit,this.orderStatus)
+        this.getList(this.page, this.limit, this.orderStatus)
       },
       // 绑定新邮筒
       addMailBox() {
@@ -168,7 +174,7 @@
 
         //数据的定位加10位
         this.offset += 10;
-        let res = [  {
+        let res = [{
           number: 'test1',
           letterNo: 96,
           status: 1
@@ -182,19 +188,19 @@
             number: 'test3',
             letterNo: 80,
             status: 1
-          },{
+          }, {
             number: 'test4',
             letterNo: 80,
             status: 1
-          },{
+          }, {
             number: 'test5',
             letterNo: 80,
             status: 1
-          },{
+          }, {
             number: 'test6',
             letterNo: 80,
             status: 1
-          },{
+          }, {
             number: 'test7',
             letterNo: 80,
             status: 1
@@ -220,35 +226,55 @@
       async getConfig() {
         let url = location.href.split('#')[0] //获取锚点之前的链接
         var res = await ticket(url)
-        console.log(res)
         console.log(res.data)
         wx.config({
-          debug : true,
-          appId : appid,
-          timestamp : res.data.timestamp,
-          nonceStr : res.data.noncestr,
-          signature : res.data.signature,
-          jsApiList : [ 'openLocation', 'getLocation']
+          debug: false,
+          appId: appid,
+          timestamp: res.data.timestamp,
+          nonceStr: res.data.noncestr,
+          signature: res.data.signature,
+          jsApiList: ['openLocation', 'getLocation']
         });
       },
-    //  地图
+      //获取所有邮筒的位置信息
+      async getAddress() {
+        var res = await allAddress()
+        console.log('address:',res.body.mailboxAddress)
+        var address = res.body.mailboxAddress
+        for( var k in address){
+        }
+      } ,
+      //  地图
       getMap() {
+        // this.$router.push({path:'/showMap'})
         var self = this;
         wx.getLocation({
-          type : 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-          success : function(res) {
+          type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+          success: function (res) {
             //使用微信内置地图查看位置接口
-            var la=parseFloat(res.latitude)
-            var lo=parseFloat(res.longitude)
+            var la = parseFloat(res.latitude)
+            var lo = parseFloat(res.longitude)
             wx.openLocation({
-              latitude : la, // 纬度，浮点数，范围为90 ~ -90
-              longitude : lo, // 经度，浮点数，范围为180 ~ -180。
-              name : '我的位置', // 位置名
-              address : '329创业者社区', // 地址详情说明
-              scale : 28, // 地图缩放级别,整形值,范围从1~28。默认为最大
+              latitude: la, // 纬度，浮点数，范围为90 ~ -90
+              longitude: lo, // 经度，浮点数，范围为180 ~ -180。
+              name: '我的位置', // 位置名
+              address: '蜀山区动漫产业园一期B1', // 地址详情说明
+              scale: 28, // 地图缩放级别,整形值,范围从1~28。默认为最大
             });
           },
-          cancel : function(res) {
+          cancel: function (res) {
+            Toast({
+              message: "您拒绝了授权地理位置，将不能获取邮筒地点!",
+              position: 'middle',
+              duration: 2000
+            })
+          },
+          fail: function (res) {
+            Toast({
+              message: "获取邮筒地理位置失败，请重试！",
+              position: 'middle',
+              duration: 2000
+            })
           }
         });
       },
@@ -287,6 +313,7 @@
     position: relative;
     height: 40px;
     line-height: 30px;
+    border-bottom: solid #999 1px;
   }
 
   .sort-title {
@@ -408,11 +435,11 @@
     color: #007aff;
   }
 
-  .return_top{
+  .return_top {
     position: fixed;
     bottom: 2rem;
     right: 1rem;
-    .back_top_svg{
+    .back_top_svg {
       @include wh(1.5rem, 1.5rem);
     }
   }
@@ -422,34 +449,33 @@
     width: 100%;
     height: 50px;
     bottom: 0;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
   }
 
-  .btn-container button{
+  .btn-container button {
+    display: inline-block;
     position: absolute;
     background-color: #007aff;
     color: #fff;
-    width: 80%;
+    width: 41%;
     height: 30px;
     line-height: 30px;
     vertical-align: middle;
-    top:10px;
-    margin-left: 10%;
+    top: 10px;
+    /*margin-left: 10%;*/
     border-radius: 5px;
+    margin-left: 6%;
   }
 
-  .location {
+  .empty {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 100px;
+    /*background-color: #007aff;*/
+    text-align: center;
+    color: #999;
+    margin-top: 30px;
   }
 
-  #map {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    top:0;
-    /*background: cadetblue;*/
-  }
 
 </style>

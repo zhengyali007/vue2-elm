@@ -11,6 +11,8 @@ const changePhone = r => require.ensure([],() => r(require('../page/postProfile/
 const myMailBox = r => require.ensure([],() => r(require('../page/postMailBox/myMailBox')),'myMailBox')
 //邮筒详情
 const mailBoxDetail = r => require.ensure([],() => r(require('../page/postMailBox/mailBoxDetail')),'mailBoxDetail')
+// 地图显示
+const showMap = r => require.ensure([],() => r(require('../page/postMailBox/map')),'map')
 // 添加我的邮筒（邮筒绑定）
 const addMailBox = r => require.ensure([],() => r(require('../page/postMailBox/addMailBox')),'addMailBox')
 //考勤信息
@@ -52,6 +54,13 @@ export default [{
     {
       path: '/mailBoxDetail',
       component: mailBoxDetail,
+      meta: {
+        login: true
+      }
+    },
+    {
+      path: '/showMap',
+      component: showMap,
       meta: {
         login: true
       }
