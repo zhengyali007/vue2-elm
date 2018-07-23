@@ -21,20 +21,18 @@
     <div class="btn-container">
       <button class="login-btn" @click="bind">绑定</button>
     </div>
-    <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeTip" @closeSur="closeSure" :alertText="alertText"></alert-tip>
   </div>
 </template>
 
 <script>
   import {appid,weiXinUrl,serverName} from 'src/service/getData'
-  import alertTip from 'src/components/common/alertTip'
+  import { Toast } from 'mint-ui';
   import {getAuthCode, bindingUser} from "../../service/getData";
 
   export default {
-    components: {alertTip},
+    components: {Toast},
     data() {
       return {
-        showAlert:false,
         count: '',
         codeShow: true, // 获取验证码
         timer: null,
@@ -43,6 +41,9 @@
         code: '123456',
         openid: '',
       }
+    },
+    created() {
+
     },
     mounted() {
       this.redirected()
@@ -60,13 +61,18 @@
           // document.cookie = "token=" +this.$route.query.token
           console.log(12327,this.$route.query.token)
           this.lastUrl = localStorage.getItem('lastUrl')
-          localStorage.removeItem('lastUrl')
+          // localStorage.removeItem('lastUrl')
           console.log(this.lastUrl === '/postLogin')
           console.log(this.lastUrl)
           if (this.lastUrl === '/postLogin'){
             this.$router.push({path: '/postProfile'})
           }else {
             console.log(this.lastUrl)
+            Toast({
+              message: '登录成功！',
+              position: 'middle',
+              duration: 1000
+            });
             this.$router.push({path: this.lastUrl})
           }
         }else if(!this.$route.query.openid){
@@ -118,9 +124,11 @@
               }, 1000)
             }
           }else if(response.errorCode==402){
-            // console.log(response.msg)
-              this.showAlert = true;
-              this.alertText = response.msg;
+            Toast({
+              message: response.msg,
+              position: 'middle',
+              duration: 2000
+            });
           }
         }catch(error){
           console.log(error)
@@ -132,12 +140,20 @@
          let response = await bindingUser(this.phoneNumber,this.code,this.openid);
          console.log('response2:',response);
          if (response.errorCode==200) {
+           Toast({
+             message: '绑定成功！',
+             position: 'middle',
+             duration: 1000
+           });
            window.location.href="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ appid +"&redirect_uri="+ weiXinUrl +"%2f"+ serverName+"%2fwx%2fverificationUser&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
            console.log('success')
          }else if(response.errorCode==402){
            // console.log(response.msg)
-           this.showAlert = true;
-           this.alertText = response.msg;
+           Toast({
+             message: response.msg,
+             position: 'middle',
+             duration: 2000
+           });
          }
        }catch(error){
          console.log(error)
@@ -145,13 +161,6 @@
 
        // this.$router.push({path: '/postProfile'})
       },
-      //弹框处理？
-      closeTip(){
-        this.showAlert = false;
-      },
-      closeSure(){
-        this.showAlert = false;
-      }
     },
   }
 </script>

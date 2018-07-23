@@ -47,6 +47,10 @@
       </aside>
     </div>
     <div class="location" v-else>
+      <div id="map" ref="map">
+
+      </div>
+      <!--<button @click="getMap">查看地图</button>-->
     </div>
     <transition name="loading">
       <loading v-show="showLoading"></loading>
@@ -60,7 +64,8 @@
   import {loadMore} from 'src/components/common/mixin'
   import {animate} from 'src/config/mUtils'
   import loading from 'src/components/common/loading'
-  import {getMyMailList,getBreakMailBox} from  'src/service/getData'
+  import {getMyMailList,getBreakMailBox,ticket} from  'src/service/getData'
+  import {appid} from "../../service/getData";
 
   export default {
     components: {
@@ -78,23 +83,30 @@
         showBackStatus: false,// 展示"回到顶部"图标
         asc: true,// 升序降序请求标识，控制加载更多请求数据
         numbers: [],
-        breakStatus: true
+        breakStatus: true,
+        la:undefined,
+        lo:undefined,
       }
     },
     watch: {
       //监听tab切换
       selected: function () {
         console.log(this.selected)
+        if (this.selected === '1'){
+          this.getList()
+        }
+        if (this.selected === '2'){
+          this.getMap()
+        }
       }
     },
     mounted() {
       this.getList()
+      this.getConfig()
     },
     methods: {
       //获取数据
       async getList(){
-        // var id = '1004';
-        // alert(1)
         var myMail = await getMyMailList(this.page,this.limit,this.orderStatus);
         // var test = myMail.headers.get('content-type')
         console.log(myMail)
@@ -205,15 +217,40 @@
         animate(document.body, {scrollTop: '0'}, 400, 'ease-out');
       },
       // 微信分参数
-      getConfig() {
+      async getConfig() {
         let url = location.href.split('#')[0] //获取锚点之前的链接
-        // this.$http.get('/index.php',{
-        //   params: {
-        //     url: url
-        //   }
-        // }).then(response => {
-        //   let res = response.data;
-        // })
+        var res = await ticket(url)
+        console.log(res)
+        console.log(res.data)
+        wx.config({
+          debug : true,
+          appId : appid,
+          timestamp : res.data.timestamp,
+          nonceStr : res.data.noncestr,
+          signature : res.data.signature,
+          jsApiList : [ 'openLocation', 'getLocation']
+        });
+      },
+    //  地图
+      getMap() {
+        var self = this;
+        wx.getLocation({
+          type : 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+          success : function(res) {
+            //使用微信内置地图查看位置接口
+            var la=parseFloat(res.latitude)
+            var lo=parseFloat(res.longitude)
+            wx.openLocation({
+              latitude : la, // 纬度，浮点数，范围为90 ~ -90
+              longitude : lo, // 经度，浮点数，范围为180 ~ -180。
+              name : '我的位置', // 位置名
+              address : '329创业者社区', // 地址详情说明
+              scale : 28, // 地图缩放级别,整形值,范围从1~28。默认为最大
+            });
+          },
+          cancel : function(res) {
+          }
+        });
       },
     },
   }
@@ -229,6 +266,12 @@
     margin: 0px;
     font-size: 14px;
     color: #333;
+  }
+
+  #my-mail-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
 
   .list {
@@ -395,5 +438,18 @@
     border-radius: 5px;
   }
 
+  .location {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  #map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top:0;
+    /*background: cadetblue;*/
+  }
 
 </style>

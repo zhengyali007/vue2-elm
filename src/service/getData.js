@@ -31,51 +31,69 @@ var bindingUser = (phone, smsCode, openid) => fetch('POST', '/' + serverName + '
   smsCode: smsCode,
   openid: openid,
 });
+//  获取微信ticket
+var ticket = (url) => fetch('GET', '/' + serverName + '/wx/jsSdkConfig/getConfig', {
+  url: url,
+  // token: localStorage.getItem('token')
+});
 
 //  获取我的邮筒列表
-var getMyMailList = (page,limit,orderStatus) => fetch('GET', '/' + serverName + '/wx/mailbox', {
+var getMyMailList = (page, limit, orderStatus) => fetch('GET', '/' + serverName + '/wx/mailbox', {
   // id: id,
-  page:page,
-  limit:limit,
-  orderStatus:orderStatus,
+  page: page,
+  limit: limit,
+  orderStatus: orderStatus,
   token: localStorage.getItem('token')
 });
 
 //  获取邮筒详情
-var getMailDetail = (id) => fetch('GET', '/' + serverName + '/wx//listMailboxById/'+id, {
+var getMailDetail = (id) => fetch('GET', '/' + serverName + '/wx//listMailboxById/' + id, {
   token: localStorage.getItem('token')
 });
 
 //  查看故障邮筒
-var getBreakMailBox = (page,limit) => fetch('GET', '/' + serverName + '/wx/mailboxFault/', {
+var getBreakMailBox = (page, limit) => fetch('GET', '/' + serverName + '/wx/mailboxFault/', {
   page: page,
   limit: limit,
   token: localStorage.getItem('token')
 });
 
 //  获取考勤记录列表
-var getAttendanceList = (page,limit) => fetch('GET', '/' + serverName + '/wx/listAttendance/', {
+var getAttendanceList = (page, limit) => fetch('GET', '/' + serverName + '/wx/listAttendance/', {
   page: page,
   limit: limit,
   token: localStorage.getItem('token')
 });
 
 //  获取考勤记录详情
-var getAttendanceDetail = (id) => fetch('GET', '/' + serverName + '/wx/listAttendanceById/'+id, {
+var getAttendanceDetail = (id) => fetch('GET', '/' + serverName + '/wx/listAttendanceById/' + id, {
   token: localStorage.getItem('token')
 });
 
 //  获取个人信息
-var getProfile= () => fetch('GET', '/' + serverName + '/wx/postMan', {
+var getProfile = () => fetch('GET', '/' + serverName + '/wx/postMan', {
+  token: localStorage.getItem('token')
+});
+
+//  解绑
+var unBind = () => fetch('POST', '/' + serverName + '/wx/unbinding', {
   token: localStorage.getItem('token')
 });
 
 
 //  保存个人信息
-var saveProfile= (email,year,address) => fetch('GET', '/' + serverName + '/wx/updatePostman', {
-  email:email,
-  year:year,
-  address:address,
+var saveProfile = (email, workedYears, address) => fetch('GET', '/' + serverName + '/wx/updatePostman', {
+  email: email,
+  workedYears: workedYears,
+  address: address,
+  token: localStorage.getItem('token')
+});
+
+//  添加邮筒
+var addMailBox = (email, workedYears, address) => fetch('GET', '/' + serverName + '/wx/updatePostman', {
+  email: email,
+  workedYears: workedYears,
+  address: address,
   token: localStorage.getItem('token')
 });
 
@@ -90,6 +108,8 @@ export {
   getAttendanceDetail,
   getProfile,
   saveProfile,
+  unBind,
+  ticket,
   serverUrl,
   weiXinUrl,
   appid,

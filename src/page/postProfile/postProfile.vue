@@ -44,12 +44,13 @@
 </template>
 
 <script>
-  import {Radio, Cell} from 'mint-ui';
-  import {getProfile ,  saveProfile} from "../../service/getData";
+  import { Cell, Toast} from 'mint-ui';
+
+  import {getProfile ,  saveProfile, unBind} from "../../service/getData";
 
   export default {
     components: {
-      Radio, Cell
+       Cell, Toast
     },
     data() {
       return {
@@ -91,7 +92,7 @@
           this.sex = res.sex;
           this.email = res.email;
           this.workNo = res.workNo;
-          this.workedYears = res.workNo;
+          this.workedYears = res.workedYears;
           this.address = res.address;
         }
       },
@@ -105,13 +106,24 @@
         var response = await saveProfile(this.email,this.workedYears,this.address)
         console.log(response)
         if(response.errorCode === "200"){
-
-        }
+          Toast({
+            message: '保存成功',
+            position: 'bottom',
+            duration: 2000
+          });
+          this.getProfile()
+      }
         // this.$router.push({path:'/myMailBox'})
       },
     //  解除绑定
-      unBind() {
+      async unBind() {
         // 调取接口解除绑定并跳转至登录页面
+        var response = await unBind()
+        console.log(response)
+        if (response.errorCode === '200'){
+          localStorage.removeItem('token')
+         window.location.reload()
+        }
       }
     },
   }
@@ -153,7 +165,7 @@
     border: none;
     background-color: #fff;
     color: #007aff;
-    width:65px;
+    width:70px;
   }
 
   .single {
