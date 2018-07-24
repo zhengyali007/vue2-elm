@@ -48,6 +48,7 @@
 <script>
   import { Cell, Toast} from 'mint-ui';
 
+
   import {getProfile ,  saveProfile, unBind} from "../../service/getData";
 
   export default {

@@ -1,32 +1,57 @@
 <template>
   <div id="map-index">
     <div id="map">
-
     </div>
   </div>
 </template>
 
 
 <script>
+  import BMap from 'BMap'
+  import {allAddress} from "../../service/getData";
+
   export default {
     components: {},
     data() {
-      return {}
+      return {
+        map:'',
+        addressArr: [
+          {
+            latitude: '111.742579',
+            longitude: '40.818675'
+          },
+          {
+            latitude: '111.742579',
+            longitude: '40.812675'
+          }
+        ]
+      }
     },
-    mounted() {},
+    mounted() {
+      this.getMap()
+    },
     methods: {
-      getMap() {
-        // 百度地图API功能
-        var map = new BMap.Map("allmap");    // 创建Map实例
-        map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
-        //添加地图类型控件
-        map.addControl(new BMap.MapTypeControl({
-          mapTypes:[
-            BMAP_NORMAL_MAP,
-            BMAP_HYBRID_MAP
-          ]}));
-        map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
-        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+      async getMap() {
+        this.map = new BMap.Map('map')
+        var res = await allAddress()
+        var address  = res.body.mailboxAddress
+        console.log(address)
+        var testLa = address[0].latitude
+        var testLo = address[0].longitude
+        console.log(testLa,testLo)
+        var  test= new BMap.Point(testLo,testLa)
+        this.map.centerAndZoom(test, 15);
+        for(var k in address){
+          console.log(address[k].longitude,address[k].latitude) //经纬度
+          var lat = address[k].latitude
+          var lon = address[k].longitude
+          var point = new BMap.Point(lon,lat)
+          this.addMarker(point);
+        }
+      },
+      addMarker(point){
+        var marker = new BMap.Marker(point);
+        this.map.addOverlay(marker);
       }
     },
   }
@@ -39,24 +64,22 @@
     outline: none;
     border: none;
     padding: 0px;
-    margin: 0px ;
+    margin: 0px;
     font-size: 16px;
     color: #333;
   }
 
-  map-index {
+  #map-index {
     position: absolute;
     width: 100%;
     height: 100%;
   }
 
-  .map {
+  #map {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: #007aff;
   }
-
 
 
 </style>

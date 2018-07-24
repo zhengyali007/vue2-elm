@@ -1,6 +1,7 @@
 <template>
   <div id="change-phone">
-    <section class="change-title">修改手机号</section>
+    <head-top go-back="true" head-title="修改手机号" style="position: relative"></head-top>
+    <!--<section class="change-title">修改手机号</section>-->
     <mt-cell title="旧手机号：">
       <input type="text" placeholder="请输入旧手机号码" v-model="oldPhone"/>
     </mt-cell>
@@ -19,9 +20,10 @@
 <script>
   import {Cell,Toast} from 'mint-ui';
   import {getAuthCode,updateMobile} from "../../service/getData";
+  import headTop from 'src/components/header/head'
 
   export default {
-    components: {Cell,Toast},
+    components: {Cell,Toast,headTop},
     data() {
       return {
         count: '',
@@ -103,7 +105,7 @@
 
   .code-input {
     position: relative;
-    width:100px;
+    width:150px;
     left:20%;
   }
 

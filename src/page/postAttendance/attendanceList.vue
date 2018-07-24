@@ -1,6 +1,6 @@
 <template>
   <div id="attendance-list">
-    <ul>
+    <ul v-show="!empty">
       <li v-for="item in numbers">
         <section class="list">
           <img src="../../images/postBox.png"/>
@@ -21,6 +21,7 @@
         </section>
       </li>
     </ul>
+    <div v-show="empty" class="no-data">暂无考勤信息</div>
   </div>
 </template>
 
@@ -40,6 +41,7 @@
         numbers: [],
         page: 1,
         limit: 10,
+        empty: false
       }
     },
     mounted() {
@@ -53,6 +55,9 @@
         console.log(attendanceList)
         var res = attendanceList.body.listAttendance
         if (attendanceList.errorCode === "200"){
+          if (res.length === 0){
+            this.empty = true
+          }
           this.numbers =res
         }
       },
@@ -132,6 +137,15 @@
     font-size: 12px;
     top:15px;
     left: 40px;
+  }
+
+  .no-data {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    margin-top: 30px;
+    text-align: center;
+    color: #666;
   }
 
 

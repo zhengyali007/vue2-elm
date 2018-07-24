@@ -85,31 +85,16 @@
         empty: false,
       }
     },
-    watch: {
-      //监听tab切换
-      // selected: function () {
-      //   console.log(this.selected)
-      //   if (this.selected === '1'){
-      //     this.getList()
-      //   }
-      //   if (this.selected === '2'){
-      //     this.getMap()
-      //   }
-      // }
-    },
     mounted() {
       this.getList()
-      this.getConfig()
-      this.getAddress()
     },
     methods: {
       //获取数据
       async getList() {
+        this.page = 1;
         this.empty = false;
         var myMail = await getMyMailList(this.page, this.limit, this.orderStatus);
-        // var test = myMail.headers.get('content-type')
         console.log(myMail)
-        // alert(2)
         var res = myMail.body.mailbox
         if (myMail.errorCode === "200") {
           if (res.length === 0){
@@ -125,6 +110,7 @@
       async checkBreak() {
         this.empty = false;
         this.breakStatus = false;
+        this.page = 1;
         // var id = 1004;
         var breakBox = await getBreakMailBox(this.page, this.limit)
         console.log(breakBox)
@@ -137,6 +123,7 @@
           console.log(this.numbers)
         }
       },
+      //查看全部邮筒
       checkAll() {
         this.breakStatus = true;
         this.getList();
@@ -222,61 +209,9 @@
       backTop() {
         animate(document.body, {scrollTop: '0'}, 400, 'ease-out');
       },
-      // 微信分参数
-      async getConfig() {
-        let url = location.href.split('#')[0] //获取锚点之前的链接
-        var res = await ticket(url)
-        console.log(res.data)
-        wx.config({
-          debug: false,
-          appId: appid,
-          timestamp: res.data.timestamp,
-          nonceStr: res.data.noncestr,
-          signature: res.data.signature,
-          jsApiList: ['openLocation', 'getLocation']
-        });
-      },
-      //获取所有邮筒的位置信息
-      async getAddress() {
-        var res = await allAddress()
-        console.log('address:',res.body.mailboxAddress)
-        var address = res.body.mailboxAddress
-        for( var k in address){
-        }
-      } ,
-      //  地图
+      //  查看邮筒分布
       getMap() {
-        // this.$router.push({path:'/showMap'})
-        var self = this;
-        wx.getLocation({
-          type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-          success: function (res) {
-            //使用微信内置地图查看位置接口
-            var la = parseFloat(res.latitude)
-            var lo = parseFloat(res.longitude)
-            wx.openLocation({
-              latitude: la, // 纬度，浮点数，范围为90 ~ -90
-              longitude: lo, // 经度，浮点数，范围为180 ~ -180。
-              name: '我的位置', // 位置名
-              address: '蜀山区动漫产业园一期B1', // 地址详情说明
-              scale: 28, // 地图缩放级别,整形值,范围从1~28。默认为最大
-            });
-          },
-          cancel: function (res) {
-            Toast({
-              message: "您拒绝了授权地理位置，将不能获取邮筒地点!",
-              position: 'middle',
-              duration: 2000
-            })
-          },
-          fail: function (res) {
-            Toast({
-              message: "获取邮筒地理位置失败，请重试！",
-              position: 'middle',
-              duration: 2000
-            })
-          }
-        });
+        this.$router.push({path:'/showMap'})
       },
     },
   }

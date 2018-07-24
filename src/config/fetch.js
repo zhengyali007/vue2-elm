@@ -49,7 +49,7 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
       if (response.status=='601'){
         // alert(1)
         // console.log(this.$router.path)
-        localStorage.setItem('lastUrl',this.$route.path)
+        // localStorage.setItem('lastUrl',this.$router.path)
         // console.log(localStorage.getItem('lastUrl'))
         window.localStorage.removeItem("token");
         window.location.href=loginUrl;
@@ -64,7 +64,6 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
       throw new Error(error)
     }
     return responseJson
-
   } else {
     let returnObj;
     return new Promise(function(resolve,reject){
@@ -105,6 +104,5 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
         }
       }
     });
-
   }
 }
