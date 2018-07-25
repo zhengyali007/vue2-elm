@@ -73,8 +73,8 @@
     data() {
       return {
         page: '1',
-        limit: '10',
-        orderStatus: 2,
+        limit: '100',
+        orderStatus: 2, //1为升序 2为降序
         selected: '1',
         active: true,//调整升序降序
         showLoading: false,// 展示loading图标
@@ -83,6 +83,7 @@
         numbers: [],
         breakStatus: true,
         empty: false,
+        loadCont: 'all',
       }
     },
     mounted() {
@@ -92,6 +93,7 @@
       //获取数据
       async getList() {
         this.page = 1;
+        this.loadCont = 'all';
         this.empty = false;
         var myMail = await getMyMailList(this.page, this.limit, this.orderStatus);
         console.log(myMail)
@@ -111,6 +113,7 @@
         this.empty = false;
         this.breakStatus = false;
         this.page = 1;
+        this.loadCont = 'break';
         // var id = 1004;
         var breakBox = await getBreakMailBox(this.page, this.limit)
         console.log(breakBox)
@@ -148,7 +151,8 @@
         this.$router.push({path: '/addMailBox'})
       },
       //到达底部加载更多数据
-      async loaderMore() {
+    /*  async loaderMore() {
+        // alert(2)
         if (this.touchend) {
           return
         }
@@ -158,53 +162,31 @@
         }
         this.showLoading = true;
         this.preventRepeatReuqest = true;
-
+        var res =[]
         //数据的定位加10位
         this.offset += 10;
-        let res = [{
-          number: 'test1',
-          letterNo: 96,
-          status: 1
-        },
-          {
-            number: 'test2',
-            letterNo: 90,
-            status: 2
-          },
-          {
-            number: 'test3',
-            letterNo: 80,
-            status: 1
-          }, {
-            number: 'test4',
-            letterNo: 80,
-            status: 1
-          }, {
-            number: 'test5',
-            letterNo: 80,
-            status: 1
-          }, {
-            number: 'test6',
-            letterNo: 80,
-            status: 1
-          }, {
-            number: 'test7',
-            letterNo: 80,
-            status: 1
-          }];
-
+        if (this.loadCont === 'all'){
+          console.log('加载更多我的邮筒')
+          this.page ++;
+          res = await getMyMailList(this.page, this.limit, this.orderStatus);
+        }
+        if (this.loadCont === 'break'){
+          this.page ++;
+          res = await getBreakMailBox(this.page, this.limit);
+          console.log('加载更多故障邮筒')
+        }
         // let res = await shopList(this.latitude, this.longitude, this.offset, this.restaurantCategoryId);
         this.showLoading = false;
         console.log(this.numbers)
         this.numbers = [...this.numbers, ...res];
         console.log(this.numbers)
         //当获取数据小于10，说明没有更多数据，不需要再次请求数据
-        if (res.length < 10) {
+        if (res.length < this.limit) {
           this.touchend = true;
           return
         }
         this.preventRepeatReuqest = false;
-      },
+      },*/
       //返回顶部
       backTop() {
         animate(document.body, {scrollTop: '0'}, 400, 'ease-out');

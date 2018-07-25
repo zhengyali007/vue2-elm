@@ -40,7 +40,7 @@
         //邮箱编号列表
         numbers: [],
         page: 1,
-        limit: 10,
+        limit: 100,
         empty: false
       }
     },

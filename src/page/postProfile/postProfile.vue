@@ -2,29 +2,30 @@
   <div id="profile">
     <section class="profile-title">个人信息</section>
     <mt-cell title="姓名：">
-      <input type="text" placeholder="请输入真实姓名" v-model="name"/>
+      <input class="text" type="text" placeholder="请输入真实姓名" v-model="name"/>
     </mt-cell>
     <mt-cell title="工号:">
       <!--<label>{{ workNo }}</label>-->
-      <input type="text" placeholder="请输入工号" v-model="workNo" disabled style="background-color: #fff"/>
+      <input class="text" type="text" placeholder="请输入工号" v-model="workNo" readonly style="background-color: #fff"/>
     </mt-cell>
     <mt-cell title="身份证号：">
       <!--<label>{{ idCard }}</label>-->
-      <input type="text" placeholder="请输入身份证号" v-model="idCard" disabled style="background-color: #fff"/>
+      <input class="text" type="text" placeholder="请输入身份证号" v-model="idCard" readonly style="background-color: #fff"/>
     </mt-cell>
     <mt-cell title="手机号码：">
+      <input class="text" type="text"  v-model="phone" readonly style="background-color: #fff;width:50%;"/>
       <!--<input type="text" placeholder="请输入真实姓名"/>-->
-      <label>{{ phone }}</label>
+      <!--<label class="text" >{{ phone }}</label>-->
       <button class="change-number" @click="changePhone">变更</button>
     </mt-cell>
     <mt-cell title="邮箱:">
-      <input type="text" placeholder="请输入邮箱" v-model="email"/>
+      <input class="text" type="text" placeholder="请输入邮箱" v-model="email"/>
     </mt-cell>
     <mt-cell title="工作年限:">
-      <input type="text" placeholder="请输入工作年限" v-model="workedYears"/>
+      <input class="text" type="text" placeholder="请输入工作年限" v-model="workedYears"/>
     </mt-cell>
     <mt-cell title="居住地址:">
-      <input type="text" placeholder="请输入地址" v-model="address"/>
+      <input class="text" type="text" placeholder="请输入地址" v-model="address"/>
     </mt-cell>
     <!--<mt-cell title="性别:">-->
       <!--<label class="single" @click="setSex1"><input type="radio" name="sex" value="male" checked/>男</label>-->
@@ -167,13 +168,20 @@
     font-size: 18px;
   }
 
-  .change-number {
+  .t- {
     position: relative;
+    left:0;
+    width: 100%;
+  }
+
+  .change-number {
+    position: absolute;
     outline: none;
     border: none;
     background-color: #fff;
     color: #007aff;
-    width:70px;
+    right:10%;
+    /*width:20%;*/
   }
 
   .single {

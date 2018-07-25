@@ -1,5 +1,6 @@
 <template>
   <div id="map-index">
+    <head-top go-back="true" head-title="邮筒分布" style="position: relative"></head-top>
     <div id="map">
     </div>
   </div>
@@ -8,10 +9,11 @@
 
 <script>
   import BMap from 'BMap'
+  import headTop from 'src/components/header/head'
   import {allAddress} from "../../service/getData";
 
   export default {
-    components: {},
+    components: {headTop},
     data() {
       return {
         map:'',
@@ -78,7 +80,8 @@
   #map {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 90%;
+    top:0;
   }
 
 

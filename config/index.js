@@ -17,7 +17,7 @@ module.exports = {
         productionGzip: false,
         productionGzipExtensions: ['js', 'css'],
         proxypath: 'http://www.clutek.com', //服务端地址
-        frontpath: 'http://192.168.1.9:8000',//前端地址
+        frontpath: 'http://192.168.1.8:8000',//前端地址
       // imagepath: 'http://osscdn.futurecommunity.cn',  //图片地址
         loginUrl:'/?#/postLogin', //登录页地址
         wxappid:'wxa2a065662559a875', //微信appid

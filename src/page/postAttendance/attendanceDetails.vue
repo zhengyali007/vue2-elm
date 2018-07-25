@@ -1,6 +1,7 @@
 <template>
   <div id="attendance-details">
-    <section class="attendance-title">考勤详情</section>
+    <head-top go-back="true" head-title="考勤详情" style="position: relative"></head-top>
+    <!--<section class="attendance-title">考勤详情</section>-->
     <div class="details">
       <mt-cell title="邮筒编号：" value="MB000000000000001"></mt-cell>
       <mt-cell title="规定开箱时间：" value="08：00"></mt-cell>
@@ -14,10 +15,11 @@
 <script>
   import { Cell} from 'mint-ui';
   import {getAttendanceDetail} from "../../service/getData";
+  import headTop from 'src/components/header/head'
 
   export default {
     components: {
-       Cell
+       Cell,headTop
     },
     data() {
       return {}

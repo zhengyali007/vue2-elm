@@ -1,8 +1,9 @@
 <template>
   <div id="addMailBox">
-    <section class="add-title">绑定邮筒</section>
+    <head-top go-back="true" head-title="绑定邮筒" style="position: relative"></head-top>
+    <!--<section class="add-title">绑定邮筒</section>-->
     <mt-cell title="邮筒编号：">
-      <input type="text" placeholder="请输入邮筒编号" v-model="deviceNo"/>
+      <input class="text" type="text" placeholder="请输入邮筒编号" v-model="deviceNo"/>
     </mt-cell>
     <mt-cell title="邮筒类型：">
       <div class="sel">
@@ -28,11 +29,12 @@
 
 <script>
   import { Cell,Toast} from 'mint-ui';
+  import headTop from 'src/components/header/head'
   import {addMailBox,typeAndAddress} from "../../service/getData";
 
   export default {
     components: {
-      Cell,Toast
+      Cell,Toast,headTop
     },
     data() {
       return {
@@ -74,18 +76,24 @@
       },
      async addBox() {
         console.log(this.deviceNo,this.selectAddress,this.selectType)
-        var res = await addMailBox(this.deviceNo,this.selectType,this.selectAddress)
-       console.log(res)
-       if (res.errorCode === '200'){
+       if(this.deviceNo === ''){
          Toast({
-           message:'绑定成功'
+           message:'请完善信息！'
          })
-         this.$router.push({path:'/myMailBox'})
-       }
-       if (res.errorCode === '402'){
-         Toast({
-           message:res.msg
-         })
+       }else {
+         var res = await addMailBox(this.deviceNo,this.selectType,this.selectAddress)
+         console.log(res)
+         if (res.errorCode === '200'){
+           Toast({
+             message:'绑定成功'
+           })
+           this.$router.push({path:'/myMailBox'})
+         }
+         if (res.errorCode === '402'){
+           Toast({
+             message:res.msg
+           })
+         }
        }
       }
     },
@@ -115,18 +123,25 @@
     font-size: 16px;
   }
 
+   .text {
+     position: relative;
+     width:100%;
+     left:0;
+   }
+
   .sel {
     //用div的样式代替select的样式
-    width: 146px;
+    width: 150px;
     height: 30px;
     border-radius: 5px;
     //盒子阴影修饰作用,自己随意
     position: relative;
-    right: 10px;
+    right: 5px;
     background-color: #fff;
   }
 
   .sel select {
+    /*position: relative;*/
     //清除select的边框样式
     border: none;
     //清除select聚焦时候的边框颜色
@@ -142,7 +157,7 @@
     //通过padding-left的值让文字居中
     padding-left: 10px;
     background-color: #fff;
-    color: #777;
+    color: #666;
   }
 
   .sel img {
