@@ -52,10 +52,7 @@
     //  判断用户的绑定状态
       redirected() {
         console.log(222)
-        // document.cookie = 'token=221212fsfsfafas'
-        // console.log(document.cookie)
         if (this.$route.query.token){
-          // $.cookie("token","this.$route.query.token")
           // 返回token直接登录跳转至页面
           localStorage.setItem('token',this.$route.query.token)
           // document.cookie = "token=" +this.$route.query.token
@@ -106,14 +103,15 @@
       //       console.log(res)
       //     })
         try {
+          var self = this;
+          // debugger;
           let response = await getAuthCode(this.phoneNumber);
           console.log('response:',response);
-          if (response.errorCode==200) {
-            if (!this.timer) {
-              this.count = 60;
-              this.codeShow = false;
-              var self = this;
-              this.timer = setInterval(() => {
+          if (response.errorCode === '200') {
+            if (!self.timer) {
+              self.count = 60;
+              self.codeShow = false;
+              self.timer = setInterval(() => {
                 if (self.count > 0 && self.count <= 60) {
                   self.count--;
                 } else {
@@ -123,7 +121,7 @@
                 }
               }, 1000)
             }
-          }else if(response.errorCode==402){
+          }else if(response.errorCode === '402'){
             Toast({
               message: response.msg,
               position: 'middle',

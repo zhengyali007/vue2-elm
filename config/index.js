@@ -17,9 +17,11 @@ module.exports = {
         productionGzip: false,
         productionGzipExtensions: ['js', 'css'],
         proxypath: 'http://www.clutek.com', //服务端地址
-        frontpath: 'http://192.168.1.8:8000',//前端地址
+        frontpath: 'http://postwx.clutek.com',//前端地址
+        // frontpath: 'http://192.168.1.8:8000',//前端地址
       // imagepath: 'http://osscdn.futurecommunity.cn',  //图片地址
-        loginUrl:'/?#/postLogin', //登录页地址
+        loginUrl:'/#/postLogin', //登录页地址
+        forbiddenUrl:'/#/postForbidden', //没有权限
         wxappid:'wxa2a065662559a875', //微信appid
         serverName:'smartPostBox/a',
         filterUrl:[],

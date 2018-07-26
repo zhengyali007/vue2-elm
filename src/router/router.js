@@ -3,6 +3,8 @@ import App from '../App'
 const test = r => require.ensure([],() => r(require('../page/postLogin/test')),'test')
 //登录
 const postLogin = r => require.ensure([],() => r(require('../page/postLogin/postLogin')),'postLogin')
+//被禁用账户
+const postForbidden = r => require.ensure([],() => r(require('../page/postLogin/postForbidden')),'postForbidden')
 //个人信息
 const postProfile = r => require.ensure([],() => r(require('../page/postProfile/postProfile')),'postProfile')
 // 修改绑定手机号
@@ -15,6 +17,8 @@ const mailBoxDetail = r => require.ensure([],() => r(require('../page/postMailBo
 const showMap = r => require.ensure([],() => r(require('../page/postMailBox/map')),'map')
 // 添加我的邮筒（邮筒绑定）
 const addMailBox = r => require.ensure([],() => r(require('../page/postMailBox/addMailBox')),'addMailBox')
+//选择地址
+const selectAddress = r => require.ensure([],() => r(require('../page/postMailBox/selectAddress')),'selectAddress')
 //考勤信息
 const attendanceList = r => require.ensure([],() => r(require('../page/postAttendance/attendanceList')),'attendanceList')
 //考勤详情
@@ -34,6 +38,10 @@ export default [{
       component: postLogin
     },
     {
+      path: '/postForbidden',
+      component: postForbidden
+    },
+    {
       path: '/postProfile',
       component: postProfile,
       meta: {
@@ -43,6 +51,9 @@ export default [{
     {
       path: '/changePhone',
       component: changePhone,
+      meta: {
+        login: true
+      }
     },
     {
       path: '/myMailBox',
@@ -68,6 +79,13 @@ export default [{
     {
       path: '/addMailBox',
       component: addMailBox,
+      meta: {
+        login: true
+      }
+    },
+    {
+      path: '/selectAddress',
+      component: selectAddress,
       meta: {
         login: true
       }

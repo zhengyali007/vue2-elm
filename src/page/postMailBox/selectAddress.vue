@@ -1,59 +1,17 @@
 <template>
-  <div id="addMailBox">
+  <div id="selectAddress">
     <head-top go-back="true" head-title="绑定邮筒" style="position: relative"></head-top>
-    <!--<section class="add-title">绑定邮筒</section>-->
-    <!--<mt-cell title="邮筒编号：">-->
-      <!--<input class="text" type="text" placeholder="请输入邮筒编号" v-model="deviceNo"/>-->
-    <!--</mt-cell>-->
-    <!--<mt-cell title="邮筒类型："  v-model="selectTypeLabel" >-->
-    <!--</mt-cell>-->
-    <div style="position: relative;left:8px;font-size: 12px;color: #888; margin:8px 0; ">请输入邮筒编号：</div>
-    <div class="input-no">
-      <input placeholder="请输入邮筒编号"/>
-    </div>
-    <mt-radio
-      title="请选择邮筒类型"
-      align="right"
-      v-model="selectType"
-      :options="type">
-    </mt-radio>
-    <mt-radio
-      title="请选择邮筒地址"
-      align="right"
-      v-model="selectAddress"
-      :options="address">
-    </mt-radio>
 
-    <!--<mt-cell title="邮筒类型：">-->
-      <!--<div class="sel">-->
-        <!--<select v-model="selectType">-->
-          <!--<option v-for="item in type"  :value="item.value">{{ item.label }}</option>-->
-        <!--</select>-->
-        <!--<img src="../../images/xiala.png"/>-->
-      <!--</div>-->
-    <!--</mt-cell>-->
-      <!--<mt-cell title="邮筒地址：">-->
-        <!--<div class="sel">-->
-          <!--<select v-model="selectAddress" >-->
-            <!--<option v-for="item in address"  :value="item.id">{{ item.address }}</option>-->
-          <!--</select>-->
-          <!--<img src="../../images/xiala.png"/>-->
-        <!--</div>-->
-    <!--</mt-cell>-->
-    <button class="add" @click="addBox">
-      绑定
-    </button>
   </div>
 </template>
 
 <script>
-  import { Cell,Toast,Radio} from 'mint-ui';
   import headTop from 'src/components/header/head'
   import {addMailBox,typeAndAddress} from "../../service/getData";
 
   export default {
     components: {
-      Cell,Toast,headTop,Radio
+      headTop
     },
     data() {
       return {
@@ -61,7 +19,6 @@
         address:[],
         deviceNo:'',
         selectType: '',
-        selectTypeLabel:'',
         selectAddress:'',
       }
     },
@@ -80,48 +37,20 @@
             typeArr.push(type[i])
           }
           this.selectType=typeArr[0].value
-          // this.selectTypeLabel=typeArr[0].label
           console.log(this.selectType)
           this.type = typeArr
           var addressArr = []
           for (var i in address) {
             addressArr.push(address[i])
-            addressArr[i]['value'] = addressArr[i]['id']
-            addressArr[i]['label'] = addressArr[i]['address']
-            delete addressArr[i]['id']
-            delete addressArr[i]['address']
           }
-          console.log(111,addressArr)
           this.address = addressArr
           // console.log(addressArr[0].id)
-          this.selectAddress=addressArr[0].value
+          this.selectAddress=addressArr[0].id
           console.log(this.selectAddress)
           this.address = addressArr
           console.log(this.type,this.address)
         }
       },
-     async addBox() {
-        console.log(this.deviceNo,this.selectAddress,this.selectType)
-       if(this.deviceNo === ''){
-         Toast({
-           message:'请完善信息！'
-         })
-       }else {
-         var res = await addMailBox(this.deviceNo,this.selectType,this.selectAddress)
-         console.log(res)
-         if (res.errorCode === '200'){
-           Toast({
-             message:'绑定成功'
-           })
-           this.$router.push({path:'/myMailBox'})
-         }
-         if (res.errorCode === '402'){
-           Toast({
-             message:res.msg
-           })
-         }
-       }
-      }
     },
   }
 </script>
@@ -134,7 +63,7 @@
     border: none;
     padding: 0px;
     margin: 0px ;
-    font-size: 16px;
+    font-size: 14px;
     color: #333;
   }
 
@@ -147,20 +76,6 @@
     line-height: 30px;
     padding-top: 5px;
     font-size: 16px;
-  }
-
-   .input-no {
-     position: relative;
-     width: 100%;
-     height: 48px;
-     line-height: 38px;
-     vertical-align: middle;
-     background-color: #fff;
-     padding: 5px 20px;
-   }
-
-  .input-no input {
-    color: #333;
   }
 
    .text {

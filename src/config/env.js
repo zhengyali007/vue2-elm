@@ -11,6 +11,7 @@ var config = require('../../config')
 let baseUrl;
 let routerMode;
 let loginUrl;
+let forbiddenUrl;
 const wxAppid = config.build.wxappid;
 const appServerName = config.build.serverName;
 const appFilterUrl = config.build.filterUrl;
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV == 'development') {
 }
 
 loginUrl =  config.build.frontpath + config.build.loginUrl;
+forbiddenUrl =  config.build.frontpath + config.build.forbiddenUrl;
 
 export {
 	baseUrl,
@@ -34,6 +36,7 @@ export {
   appServerName,
   appFilterUrl,
   appOrdinaryUserWhiteList,
-  loginUrl
+  loginUrl,
+  forbiddenUrl
 	// imgBaseUrl,
 }

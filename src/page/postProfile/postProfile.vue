@@ -1,43 +1,36 @@
 <template>
   <div id="profile">
     <section class="profile-title">个人信息</section>
-    <mt-cell title="姓名：">
-      <input class="text" type="text" placeholder="请输入真实姓名" v-model="name"/>
-    </mt-cell>
-    <mt-cell title="工号:">
-      <!--<label>{{ workNo }}</label>-->
-      <input class="text" type="text" placeholder="请输入工号" v-model="workNo" readonly style="background-color: #fff"/>
-    </mt-cell>
-    <mt-cell title="身份证号：">
-      <!--<label>{{ idCard }}</label>-->
-      <input class="text" type="text" placeholder="请输入身份证号" v-model="idCard" readonly style="background-color: #fff"/>
-    </mt-cell>
-    <mt-cell title="手机号码：">
-      <input class="text" type="text"  v-model="phone" readonly style="background-color: #fff;width:50%;"/>
-      <!--<input type="text" placeholder="请输入真实姓名"/>-->
-      <!--<label class="text" >{{ phone }}</label>-->
-      <button class="change-number" @click="changePhone">变更</button>
-    </mt-cell>
-    <mt-cell title="邮箱:">
-      <input class="text" type="text" placeholder="请输入邮箱" v-model="email"/>
-    </mt-cell>
-    <mt-cell title="工作年限:">
-      <input class="text" type="text" placeholder="请输入工作年限" v-model="workedYears"/>
-    </mt-cell>
-    <mt-cell title="居住地址:">
-      <input class="text" type="text" placeholder="请输入地址" v-model="address"/>
-    </mt-cell>
-    <!--<mt-cell title="性别:">-->
-      <!--<label class="single" @click="setSex1"><input type="radio" name="sex" value="male" checked/>男</label>-->
-      <!--<label class="single" @click="setSex2"><input type="radio" name="sex" value="female"/>女</label>-->
-      <!--&lt;!&ndash;<input type="text" placeholder="请输入性别"/>&ndash;&gt;-->
-    <!--</mt-cell>-->
-    <!--<mt-cell title="学历:">-->
-      <!--<input type="text" placeholder="请输入学历" v-model="education"/>-->
-    <!--</mt-cell>-->
-    <!--<mt-cell title="专业:">-->
-      <!--<input type="text" placeholder="请输入专业" v-model="major"/>-->
-    <!--</mt-cell>-->
+    <div class="cell">
+      <label class="cell-label">姓名：</label>
+      <input class="cell-input" placeholder="请输入真实姓名" v-model="name"/>
+    </div>
+    <div class="cell">
+      <label class="cell-label">工号：</label>
+      <input class="cell-input no-change" placeholder="请输入工号" v-model="workNo"/>
+    </div>
+    <div class="cell">
+      <label class="cell-label">身份证号：</label>
+      <input class="cell-input no-change" placeholder="请输入身份证号" v-model="idCard"/>
+    </div>
+    <div class="cell">
+      <label class="cell-label">手机号码：</label>
+      <input class="cell-input no-change" placeholder="请输入手机号码" v-model="phone" style="width: 50%;"/>
+      <button class="change" @click="changePhone">变更</button>
+    </div>
+    <div class="cell">
+      <label class="cell-label">邮箱：</label>
+      <input class="cell-input" placeholder="请输入邮箱" v-model="email"/>
+    </div>
+    <div class="cell">
+      <label class="cell-label">工作年限：</label>
+      <input class="cell-input" type="number" placeholder="请输入工作年限" v-model="workedYears"/>
+    </div>
+    <div class="cell">
+      <label class="cell-label">居住地址：</label>
+      <input class="cell-input" placeholder="请输入居住地址" v-model="address"/>
+    </div>
+
     <div class="btn-container">
       <button @click="saveProfile" class="save">保存</button>
       <button @click="unBind" class="un-bind">解除绑定</button>
@@ -166,6 +159,51 @@
     line-height: 30px;
     padding-top: 5px;
     font-size: 18px;
+  }
+
+  .cell {
+    position: relative;
+    /*background-color: #007aff;*/
+    width: 100%;
+    height: 40px;
+    line-height: 30px;
+    padding-top: 5px;
+    /*padding: 5px 10px;*/
+    border-bottom: solid #dcdcdc 1px;
+    background-color: #fff;
+  }
+
+  .cell-label {
+    display: inline-block;
+    position: relative;
+    width: 20%;
+    left:10px;
+    /*background-color: #007aff;*/
+  }
+
+  .cell-input {
+    outline: none;
+    border: none;
+    /*text-align: right;*/
+    display: inline-block;
+    position: relative;
+    right:-10px;
+    width: 70%;
+    /*background-color: #4caf50;*/
+  }
+
+  .no-change {
+    color: #999;
+  }
+
+  .change {
+    position: relative;
+    width:15%;
+    left:5%;
+    border: none;
+    outline: none;
+    background-color: #fff;
+    color: #007aff;
   }
 
   .t- {

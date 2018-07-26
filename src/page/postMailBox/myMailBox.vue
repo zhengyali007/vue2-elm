@@ -15,7 +15,7 @@
         <button class="break" @click="checkBreak" v-show="breakStatus">只看故障邮筒</button>
         <button class="break" @click="checkAll" v-show="!breakStatus">查看全部邮筒</button>
       </div>
-        <ul v-load-more="loaderMore" class="mail-list" v-show="!empty">
+        <ul  class="mail-list" v-show="!empty">
           <li v-for="item in numbers">
             <section class="mail-box-list">
               <img class="list-img" src="../../images/postBox.png"/>

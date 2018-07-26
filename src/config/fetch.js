@@ -1,6 +1,7 @@
 import {
   baseUrl,
-  loginUrl
+  loginUrl,
+  forbiddenUrl
 } from './env'
 
 
@@ -47,17 +48,18 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
     try {
       var response = await fetch(url, requestConfig);
       if (response.status=='601'){
-        // alert(1)
+        // alert(601)
         // console.log(this.$router.path)
         // localStorage.setItem('lastUrl',this.$router.path)
         // console.log(localStorage.getItem('lastUrl'))
         window.localStorage.removeItem("token");
         window.location.href=loginUrl;
-        return {"status":"400","message":"参数错误,重新登录"};
+        return {"status":"601","message":"token失效,重新登录"};
       }
-      if (response.status=='602'){
-        window.location.href=loginUrl;//回到个人中心
-        return {"status":"602","msg":"权限出错"};
+      if (response.status=='603'){
+        // alert(603)
+        window.location.href=forbiddenUrl;//被禁用用户
+        return {"status":"603","msg":"权限出错"};
       }
       var responseJson = await response.json();
     } catch (error) {
