@@ -4,7 +4,7 @@
       <li v-for="item in numbers">
         <section class="list">
           <img src="../../images/postBox.png"/>
-          <label class="number">{{item.mailboxDeviceId}}</label>
+          <label class="number">{{item.mailboxDevice.deviceNo}}</label>
           <button @click="checkDetails(item.id)">查看详情</button>
           <div class="attendance-status" v-if="item.status === '1'">
             <img src="../../images/post_a1.png"/>

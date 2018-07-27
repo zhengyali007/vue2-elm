@@ -3,10 +3,10 @@
     <head-top go-back="true" head-title="考勤详情" style="position: relative"></head-top>
     <!--<section class="attendance-title">考勤详情</section>-->
     <div class="details">
-      <mt-cell title="邮筒编号：" value="MB000000000000001"></mt-cell>
-      <mt-cell title="规定开箱时间：" value="08：00"></mt-cell>
-      <mt-cell title="实际开箱时间：" value="09：00"></mt-cell>
-      <mt-cell title="考勤状态：" value="迟开"></mt-cell>
+      <mt-cell title="邮筒编号：" :value="deviceNo"></mt-cell>
+      <mt-cell title="规定开箱时间：" :value="shouldOpenTime"></mt-cell>
+      <mt-cell title="实际开箱时间：" :value="openTime"></mt-cell>
+      <mt-cell title="考勤状态：" :value="status"></mt-cell>
     </div>
 
   </div>
@@ -22,7 +22,12 @@
        Cell,headTop
     },
     data() {
-      return {}
+      return {
+        deviceNo:'',
+        shouldOpenTime:'',
+        openTime:'',
+        status: '',
+      }
     },
     mounted() {
       this.getDetail()
@@ -30,8 +35,15 @@
     methods: {
       async getDetail() {
         var id = this.$route.query.id;
-        var detail = await getAttendanceDetail(id)
-        console.log(detail)
+        var res = await getAttendanceDetail(id)
+        console.log(res)
+        if (res.errorCode === '200'){
+          var detail = res.body.listAttendanceById
+          this.deviceNo=detail.mailboxDevice.deviceNo
+          this.shouldOpenTime = detail.shouldPickupTime
+          this.openTime = detail.pickupTime
+          this.status= detail.status
+        }
       }
     },
   }

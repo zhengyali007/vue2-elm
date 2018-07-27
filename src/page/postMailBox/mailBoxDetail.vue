@@ -53,7 +53,7 @@
           this.awaitingPickupQuantity = response.awaitingPickupQuantity
           this.deviceNo = response.deviceNo
           this.deviceStatus = response.deviceStatus
-          this.surplusBattery = response.surplusBattery
+          this.surplusBattery = response.surplusBattery + '%'
         }
       }
     },

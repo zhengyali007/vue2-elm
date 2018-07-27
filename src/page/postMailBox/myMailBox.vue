@@ -24,15 +24,12 @@
                 <img src="../../images/postLetters.png"/>
                 <label>{{ item.awaitingPickupQuantity }}</label>
               </div>
-              <label class="elc">电量：{{ item.surplusBattery }}</label>
+              <label class="elc">电量：{{ item.surplusBattery + '%' }}</label>
               <label class="if-normal" v-if="item.deviceStatus === '2'" style="color: #007aff;">正常</label>
               <label class="if-normal" v-if="item.deviceStatus === '1'" style="color: cadetblue;">待安装</label>
               <label class="if-normal" v-if="item.deviceStatus === '3'">离线</label>
               <label class="if-normal" v-if="item.deviceStatus === '4'" style="color: red;">维修</label>
               <label class="if-normal" v-if="item.deviceStatus === '5'">报废</label>
-              <!--<div class="low-elec" v-if="item.deviceStatus === 2">-->
-              <!--正常-->
-              <!--</div>-->
               <button @click="checkDetails(item.id)">查看详情</button>
             </section>
           </li>

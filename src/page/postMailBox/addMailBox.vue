@@ -1,15 +1,9 @@
 <template>
   <div id="addMailBox">
     <head-top go-back="true" head-title="绑定邮筒" style="position: relative"></head-top>
-    <!--<section class="add-title">绑定邮筒</section>-->
-    <!--<mt-cell title="邮筒编号：">-->
-      <!--<input class="text" type="text" placeholder="请输入邮筒编号" v-model="deviceNo"/>-->
-    <!--</mt-cell>-->
-    <!--<mt-cell title="邮筒类型："  v-model="selectTypeLabel" >-->
-    <!--</mt-cell>-->
     <div style="position: relative;left:8px;font-size: 12px;color: #888; margin:8px 0; ">请输入邮筒编号：</div>
     <div class="input-no">
-      <input placeholder="请输入邮筒编号"/>
+      <input placeholder="请输入邮筒编号" v-model="deviceNo"/>
     </div>
     <mt-radio
       title="请选择邮筒类型"
@@ -23,23 +17,6 @@
       v-model="selectAddress"
       :options="address">
     </mt-radio>
-
-    <!--<mt-cell title="邮筒类型：">-->
-      <!--<div class="sel">-->
-        <!--<select v-model="selectType">-->
-          <!--<option v-for="item in type"  :value="item.value">{{ item.label }}</option>-->
-        <!--</select>-->
-        <!--<img src="../../images/xiala.png"/>-->
-      <!--</div>-->
-    <!--</mt-cell>-->
-      <!--<mt-cell title="邮筒地址：">-->
-        <!--<div class="sel">-->
-          <!--<select v-model="selectAddress" >-->
-            <!--<option v-for="item in address"  :value="item.id">{{ item.address }}</option>-->
-          <!--</select>-->
-          <!--<img src="../../images/xiala.png"/>-->
-        <!--</div>-->
-    <!--</mt-cell>-->
     <button class="add" @click="addBox">
       绑定
     </button>

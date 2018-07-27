@@ -58,7 +58,8 @@ export default async(type = 'GET', url = '', data = {}, method = 'fetch') => {
       }
       if (response.status=='603'){
         // alert(603)
-        window.location.href=forbiddenUrl;//被禁用用户
+        // window.location.href=forbiddenUrl;//被禁用用户
+        window.location.href='http://postwx.clutek.com/elm/index.html#/postForbidden';//被禁用用户
         return {"status":"603","msg":"权限出错"};
       }
       var responseJson = await response.json();
