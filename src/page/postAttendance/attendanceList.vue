@@ -1,6 +1,7 @@
 <template>
-  <div id="attendance-list">
-    <ul v-show="!empty">
+  <div id="attendance-list" >
+    <div>
+    <ul  v-load-more="loaderMore" v-show="!empty" type="1" >
       <li v-for="item in numbers">
         <section class="list">
           <img src="../../images/postBox.png"/>
@@ -21,7 +22,14 @@
         </section>
       </li>
     </ul>
+      <transition name="loading">
+        <loading v-show="showLoading"></loading>
+      </transition>
+      <p v-if="touchend" class="empty_data">没有更多了</p>
+    </div>
     <div v-show="empty" class="no-data">暂无考勤信息</div>
+
+
   </div>
 </template>
 
@@ -32,16 +40,22 @@
   import {getAttendanceList} from "../../service/getData";
 
   export default {
-    components: { loading },
+    components: {loading},
     mixins: [loadMore],
     data() {
       return {
+        offset: 0,
         loading: true,
         //邮箱编号列表
         numbers: [],
         page: 1,
-        limit: 100,
-        empty: false
+        limit: 10,
+        empty: false,
+        dataList: [],
+        preventRepeatReuqest: false, //到达底部加载数据，防止重复加载
+        showBackStatus: false, //显示返回顶部按钮
+        showLoading: false, //显示加载动画
+        touchend: false, //没有更多数据
       }
     },
     mounted() {
@@ -50,22 +64,55 @@
     methods: {
       //获取考勤列表
       async getList() {
-        // var id = 1004;
-        var attendanceList = await getAttendanceList(this.page,this.limit)
+        this.dataList = []
+        var attendanceList = await getAttendanceList(this.page, this.limit)
         console.log(attendanceList)
         var res = attendanceList.body.listAttendance
-        if (attendanceList.errorCode === "200"){
-          if (res.length === 0){
+        if (attendanceList.errorCode === "200") {
+          if (res.length === 0 && this.page === 1) {
             this.empty = true
+          } else {
+            this.dataList = res
+            if (this.page === 1) {
+              this.numbers = this.dataList
+            }
           }
-          this.numbers =res
+          // this.numbers =res
+
         }
       },
       //查看详情
       checkDetails(id) {
-        this.$router.push({path: '/attendanceDetails',query: {id:id}})
+        this.$router.push({path: '/attendanceDetails', query: {id: id}})
+      },
+      //  加载更多
+      async loaderMore() {
+        // alert(1)
+        if (this.touchend) {
+          return
+        }
+        //防止重复请求
+        if (this.preventRepeatReuqest) {
+          return
+        }
+        this.showLoading = true;
+        this.preventRepeatReuqest = true;
+
+        //数据的定位加20位
+        this.offset += this.limit;
+        this.page ++;
+        let response = await getAttendanceList(this.page, this.limit);
+        var res = response.body.listAttendance
+        this.showLoading = false;
+        this.numbers = [...this.numbers, ...res];
+        //当获取数据小于20，说明没有更多数据，不需要再次请求数据
+        if (res.length < this.limit) {
+          this.touchend = true;
+          return
+        }
+        this.preventRepeatReuqest = false;
       }
-    },
+    }
   }
 </script>
 
@@ -148,5 +195,10 @@
     color: #666;
   }
 
+  .empty_data{
+    @include sc(0.5rem, #666);
+    text-align: center;
+    line-height: 2rem;
+  }
 
 </style>

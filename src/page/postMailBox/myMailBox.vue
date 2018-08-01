@@ -70,7 +70,7 @@
     data() {
       return {
         page: '1',
-        limit: '100',
+        limit: '10000',
         orderStatus: 2, //1为升序 2为降序
         selected: '1',
         active: true,//调整升序降序
