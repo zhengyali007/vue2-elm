@@ -82,9 +82,7 @@ var unBind = () => fetch('POST', '/' + serverName + '/wx/unbinding', {
 
 
 //  保存个人信息
-var saveProfile = (email, workedYears, address) => fetch('GET', '/' + serverName + '/wx/updatePostman', {
-  email: email,
-  workedYears: workedYears,
+var saveProfile = (address) => fetch('GET', '/' + serverName + '/wx/updatePostman', {
   address: address,
   token: localStorage.getItem('token')
 });

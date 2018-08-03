@@ -99,8 +99,8 @@
       },
       //保存个人信息
       async saveProfile() {
-        console.log(this.id,this.email,this.workedYears,this.address)
-        var response = await saveProfile(this.email,this.workedYears,this.address)
+        console.log(this.id,this.address)
+        var response = await saveProfile(this.address)
         console.log(response)
         if(response.errorCode === "200"){
           Toast({
