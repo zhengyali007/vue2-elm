@@ -5,26 +5,26 @@
       <label class="cell-label">姓名：</label>
       <input class="cell-input" placeholder="请输入真实姓名" v-model="name"/>
     </div>
-    <div class="cell">
-      <label class="cell-label">工号：</label>
-      <input class="cell-input no-change" placeholder="请输入工号" v-model="workNo"/>
-    </div>
-    <div class="cell">
-      <label class="cell-label">身份证号：</label>
-      <input class="cell-input no-change" placeholder="请输入身份证号" v-model="idCard"/>
-    </div>
+    <!--<div class="cell">-->
+      <!--<label class="cell-label">工号：</label>-->
+      <!--<input class="cell-input no -change" placeholder="请输入工号" v-model="workNo"/>-->
+    <!--</div>-->
+    <!--<div class="cell">-->
+      <!--<label class="cell-label">身份证号：</label>-->
+      <!--<input class="cell-input no-change" placeholder="请输入身份证号" v-model="idCard"/>-->
+    <!--</div>-->
     <div class="cell">
       <label class="cell-label">手机号码：</label>
       <input class="cell-input no-change" placeholder="请输入手机号码" v-model="phone" style="width: 50%;"/>
       <button class="change" @click="changePhone">变更</button>
     </div>
+    <!--<div class="cell">-->
+      <!--<label class="cell-label">邮箱：</label>-->
+      <!--<input class="cell-input" placeholder="请输入邮箱" v-model="email"/>-->
+    <!--</div>-->
     <div class="cell">
-      <label class="cell-label">邮箱：</label>
-      <input class="cell-input" placeholder="请输入邮箱" v-model="email"/>
-    </div>
-    <div class="cell">
-      <label class="cell-label">工作年限：</label>
-      <input class="cell-input" type="number" placeholder="请输入工作年限" v-model="workedYears"/>
+      <label class="cell-label">年龄：</label>
+      <input class="cell-input no-change" type="number" placeholder="请输入年龄" v-model="age" readonly/>
     </div>
     <div class="cell">
       <label class="cell-label">居住地址：</label>
@@ -58,7 +58,7 @@
         idCard: '',
         email: '',
         workNo: '',
-        workedYears: '',
+        age: '',
         address: '',
       }
     },
@@ -89,7 +89,7 @@
           this.sex = res.sex;
           this.email = res.email;
           this.workNo = res.workNo;
-          this.workedYears = res.workedYears;
+          this.age = res.age;
           this.address = res.address;
         }
       },

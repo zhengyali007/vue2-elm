@@ -1,22 +1,27 @@
 <template>
   <div id="addMailBox">
     <head-top go-back="true" head-title="绑定邮筒" style="position: relative"></head-top>
-    <div style="position: relative;left:8px;font-size: 12px;color: #888; margin:8px 0; ">请输入邮筒编号：</div>
+    <!--<hr>-->
+    <!--<div class="address">-->
+      <!--<p>地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址-->
+        <!--地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址地址</p>-->
+    <!--</div>-->
+    <div style="position: relative;left:8px;font-size: 12px;color: #888; margin:8px 0; ">邮筒编号：</div>
     <div class="input-no">
       <input placeholder="请输入邮筒编号" v-model="deviceNo"/>
     </div>
-    <mt-radio
-      title="请选择邮筒类型"
-      align="right"
-      v-model="selectType"
-      :options="type">
-    </mt-radio>
-    <mt-radio
-      title="请选择邮筒地址"
-      align="right"
-      v-model="selectAddress"
-      :options="address">
-    </mt-radio>
+    <!--<mt-radio-->
+      <!--title="请选择邮筒类型"-->
+      <!--align="right"-->
+      <!--v-model="selectType"-->
+      <!--:options="type">-->
+    <!--</mt-radio>-->
+    <!--<mt-radio-->
+      <!--title="请选择邮筒地址"-->
+      <!--align="right"-->
+      <!--v-model="selectAddress"-->
+      <!--:options="address">-->
+    <!--</mt-radio>-->
     <button class="add" @click="addBox">
       绑定
     </button>
@@ -43,40 +48,40 @@
       }
     },
     mounted() {
-      this.getSelectValue()
+      // this.getSelectValue()
     },
     methods: {
-      async getSelectValue() {
-        var res = await typeAndAddress()
-        console.log(res)
-        if(res.errorCode === '200'){
-          var type = res.body.deviceType
-          var address = res.body.dutyAddress
-          var typeArr = []
-          for (var i in type) {
-            typeArr.push(type[i])
-          }
-          this.selectType=typeArr[0].value
-          // this.selectTypeLabel=typeArr[0].label
-          console.log(this.selectType)
-          this.type = typeArr
-          var addressArr = []
-          for (var i in address) {
-            addressArr.push(address[i])
-            addressArr[i]['value'] = addressArr[i]['id']
-            addressArr[i]['label'] = addressArr[i]['address']
-            delete addressArr[i]['id']
-            delete addressArr[i]['address']
-          }
-          console.log(111,addressArr)
-          this.address = addressArr
-          // console.log(addressArr[0].id)
-          this.selectAddress=addressArr[0].value
-          console.log(this.selectAddress)
-          this.address = addressArr
-          console.log(this.type,this.address)
-        }
-      },
+      // async getSelectValue() {
+      //   var res = await typeAndAddress()
+      //   console.log(res)
+      //   if(res.errorCode === '200'){
+      //     var type = res.body.deviceType
+      //     var address = res.body.dutyAddress
+      //     var typeArr = []
+      //     for (var i in type) {
+      //       typeArr.push(type[i])
+      //     }
+      //     this.selectType=typeArr[0].value
+      //     // this.selectTypeLabel=typeArr[0].label
+      //     console.log(this.selectType)
+      //     this.type = typeArr
+      //     var addressArr = []
+      //     for (var i in address) {
+      //       addressArr.push(address[i])
+      //       addressArr[i]['value'] = addressArr[i]['id']
+      //       addressArr[i]['label'] = addressArr[i]['address']
+      //       delete addressArr[i]['id']
+      //       delete addressArr[i]['address']
+      //     }
+      //     console.log(111,addressArr)
+      //     this.address = addressArr
+      //     // console.log(addressArr[0].id)
+      //     this.selectAddress=addressArr[0].value
+      //     console.log(this.selectAddress)
+      //     this.address = addressArr
+      //     console.log(this.type,this.address)
+      //   }
+      // },
      async addBox() {
         console.log(this.deviceNo,this.selectAddress,this.selectType)
        if(this.deviceNo === ''){
@@ -84,7 +89,7 @@
            message:'请完善信息！'
          })
        }else {
-         var res = await addMailBox(this.deviceNo,this.selectType,this.selectAddress)
+         var res = await addMailBox(this.deviceNo)
          console.log(res)
          if (res.errorCode === '200'){
            Toast({
@@ -113,6 +118,30 @@
     margin: 0px ;
     font-size: 16px;
     color: #333;
+  }
+
+  hr {
+    border: none;
+    height: 1px;
+    background-color: #dcdcdc;
+    position: relative;
+    top:5px;
+    width: 90%;
+    margin-left: 5%;
+  }
+
+  .address {
+    position: relative;
+    width:90%;
+    top: 10px;
+    margin-left: 5%;
+    padding-bottom: 5px;
+    border-bottom: solid 1px #dcdcdc;
+  }
+
+  .address  p {
+    word-wrap:break-word;
+    word-break:break-all;
   }
 
    .add-title {

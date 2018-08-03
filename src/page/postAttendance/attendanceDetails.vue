@@ -27,10 +27,12 @@
         shouldOpenTime:'',
         openTime:'',
         status: '',
+        date: '',
       }
     },
     mounted() {
       this.getDetail()
+      this.date =  new Date();
     },
     methods: {
       async getDetail() {

@@ -3,11 +3,12 @@
     <head-top go-back="true" head-title="邮筒详情" style="position: relative"></head-top>
     <!--<section class="detail-title">邮筒详情</section>-->
     <mt-cell title="邮筒编号：" :value="deviceNo"></mt-cell>
-    <mt-cell title="设备状态：" value="待安装" v-if="deviceStatus === '1'"></mt-cell>
-    <mt-cell title="设备状态：" value="正常" v-if="deviceStatus === '2'"></mt-cell>
-    <mt-cell title="设备状态：" value="离线" v-if="deviceStatus === '3'"></mt-cell>
-    <mt-cell title="设备状态：" value="维修" v-if="deviceStatus === '4'"></mt-cell>
-    <mt-cell title="设备状态：" value="报废" v-if="deviceStatus === '5'"></mt-cell>
+    <mt-cell title="设备状态：" :value="deviceStatus"></mt-cell>
+    <!--<mt-cell title="设备状态：" value="正常" v-if="deviceStatus === '2'"></mt-cell>-->
+    <!--<mt-cell title="设备状态：" value="离线" v-if="deviceStatus === '3'"></mt-cell>-->
+    <!--<mt-cell title="设备状态：" value="维修" v-if="deviceStatus === '4'"></mt-cell>-->
+    <!--<mt-cell title="设备状态：" value="报废" v-if="deviceStatus === '5'"></mt-cell>-->
+    <!--<mt-cell title="设备电量：" value=0 v-if="surplusBattery === '' || surplusBattery === null"></mt-cell>-->
     <mt-cell title="设备电量：" :value="surplusBattery"></mt-cell>
     <mt-cell title="信件量：" :value="awaitingPickupQuantity"></mt-cell>
     <div class="address">
@@ -53,7 +54,11 @@
           this.awaitingPickupQuantity = response.awaitingPickupQuantity
           this.deviceNo = response.deviceNo
           this.deviceStatus = response.deviceStatus
-          this.surplusBattery = response.surplusBattery + '%'
+          if(response.surplusBattery === null || response.surplusBattery  === ''){
+            this.surplusBattery = '0%'
+          }else {
+            this.surplusBattery = response.surplusBattery + '%'
+          }
         }
       }
     },
@@ -85,6 +90,7 @@
     padding: 10px;
     border-top: solid #eeeeee 1px;
   }
+
 
   .address label {
     position: relative;

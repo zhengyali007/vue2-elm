@@ -95,10 +95,8 @@ var typeAndAddress = () => fetch('GET', '/' + serverName + '/wx/selectInfo', {
 });
 
 //  添加邮筒
-var addMailBox = (deviceNo, deviceType,dutyAddress) => fetch('GET', '/' + serverName + '/wx/addMailbox', {
+var addMailBox = (deviceNo) => fetch('GET', '/' + serverName + '/wx/addMailbox', {
   deviceNo: deviceNo,
-  deviceType: deviceType,
-  dutyAddress: dutyAddress,
   token: localStorage.getItem('token')
 });
 

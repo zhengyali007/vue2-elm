@@ -24,12 +24,13 @@
                 <img src="../../images/postLetters.png"/>
                 <label>{{ item.awaitingPickupQuantity }}</label>
               </div>
-              <label class="elc">电量：{{ item.surplusBattery + '%' }}</label>
-              <label class="if-normal" v-if="item.deviceStatus === '2'" style="color: #007aff;">正常</label>
-              <label class="if-normal" v-if="item.deviceStatus === '1'" style="color: cadetblue;">待安装</label>
-              <label class="if-normal" v-if="item.deviceStatus === '3'">离线</label>
-              <label class="if-normal" v-if="item.deviceStatus === '4'" style="color: red;">维修</label>
-              <label class="if-normal" v-if="item.deviceStatus === '5'">报废</label>
+              <label class="elc" v-if="item.surplusBattery === '' || item.surplusBattery === null">电量： 0% </label>
+              <label class="elc" v-else>电量：{{ item.surplusBattery + '%' }}</label>
+              <!--<label class="if-normal" v-if="item.deviceStatus === '1'" style="color: #007aff;">在线</label>-->
+              <!--<label class="if-normal" v-if="item.deviceStatus === '1'" style="color: cadetblue;"></label>-->
+              <!--<label class="if-normal" v-if="item.deviceStatus === '3'">离线</label>-->
+              <!--<label class="if-normal" v-if="item.deviceStatus === '4'" style="color: red;">维修</label>-->
+              <label class="if-normal">{{ item.deviceStatus }}</label>
               <button @click="checkDetails(item.id)">查看详情</button>
             </section>
           </li>
@@ -37,7 +38,7 @@
         <div v-show="empty" class="empty">暂无数据</div>
         <div class="btn-container">
           <button @click="addMailBox">绑定新邮筒</button>
-          <button @click="getMap" style="margin-left: 53%">邮筒分布</button>
+          <!--<button @click="getMap" style="margin-left: 53%">邮筒分布</button>-->
         </div>
         <aside class="return_top" @click="backTop" v-if="showBackStatus">
           <svg class="back_top_svg">
@@ -371,14 +372,16 @@
     position: absolute;
     background-color: #007aff;
     color: #fff;
-    width: 41%;
+    /*width: 41%;*/
+    width: 80%;
     height: 30px;
     line-height: 30px;
     vertical-align: middle;
     top: 10px;
     /*margin-left: 10%;*/
     border-radius: 5px;
-    margin-left: 6%;
+    /*margin-left: 6%;*/
+    margin-left: 10%;
   }
 
   .empty {

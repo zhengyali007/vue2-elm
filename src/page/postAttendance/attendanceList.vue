@@ -19,6 +19,10 @@
             <img src="../../images/post_a3.png"/>
             <label>未开</label>
           </div>
+          <div class="time">
+            <label v-if="item.pickupTime === null || item.pickupTime === '' ">未开箱</label>
+            <label v-if="item.pickupTime">开箱时间：{{item.pickupTime}}</label>
+          </div>
         </section>
       </li>
     </ul>
@@ -178,12 +182,26 @@
 
   .attendance-status label {
     position: absolute;
-    width: 100px;
+    width: 80px;
     height: 20px;
     line-height: 20px;
     font-size: 12px;
-    top:15px;
-    left: 40px;
+    bottom:-36px;
+    left: 36px;
+  }
+
+  .time {
+    display: inline-block;
+    position: absolute;
+    width: 300px;
+    height: 20px;
+    line-height: 20px;
+    bottom:5px;
+    left: 120px;
+  }
+
+  .time label {
+    font-size: 12px;
   }
 
   .no-data {
