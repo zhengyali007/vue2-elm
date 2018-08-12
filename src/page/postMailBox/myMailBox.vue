@@ -38,7 +38,7 @@
         <div v-show="empty" class="empty">暂无数据</div>
         <div class="btn-container">
           <button @click="addMailBox">绑定新邮筒</button>
-          <!--<button @click="getMap" style="margin-left: 53%">邮筒分布</button>-->
+          <button @click="getMap" style="margin-left: 53%">邮筒分布</button>
         </div>
         <aside class="return_top" @click="backTop" v-if="showBackStatus">
           <svg class="back_top_svg">
@@ -372,16 +372,16 @@
     position: absolute;
     background-color: #007aff;
     color: #fff;
-    /*width: 41%;*/
-    width: 80%;
+    width: 41%;
+    /*width: 80%;*/
     height: 30px;
     line-height: 30px;
     vertical-align: middle;
     top: 10px;
     /*margin-left: 10%;*/
     border-radius: 5px;
-    /*margin-left: 6%;*/
-    margin-left: 10%;
+    margin-left: 6%;
+    /*margin-left: 10%;*/
   }
 
   .empty {

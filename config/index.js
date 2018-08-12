@@ -17,8 +17,9 @@ module.exports = {
         productionGzip: false,
         productionGzipExtensions: ['js', 'css'],
         proxypath: 'http://post.midutek.com', //服务端地址
+        // proxypath: 'http://www.clutek.com', //服务端地址
         frontpath: 'http://postwx.clutek.com',//前端地址
-        // frontpath: 'http://192.168.1.8:8000',//前端地址
+        // frontpath: 'http://192.168.1.9:8000',//前端地址
       // imagepath: 'http://osscdn.futurecommunity.cn',  //图片地址
         loginUrl:'/#/postLogin', //登录页地址
         forbiddenUrl:'/#/postForbidden', //没有权限
@@ -49,6 +50,7 @@ module.exports = {
             '/img',
         ],
         proxypath: 'http://post.midutek.com',
+        // proxypath: 'http://www.clutek.com',
         // CSS Sourcemaps off by default because relative paths are "buggy"
         // with this option, according to the CSS-Loader README
         // (https://github.com/webpack/css-loader#sourcemaps)

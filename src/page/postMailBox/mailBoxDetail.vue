@@ -18,17 +18,21 @@
     <!--<mt-cell title="所处位置：" :value="address">-->
       <!--<p style="width:200px;word-break:normal;word-wrapL:break-word;">{{address}}</p>-->
     <!--</mt-cell>-->
+
+    <div class="unbind">
+      <button @click="unBinding">解绑</button>
+    </div>
   </div>
 </template>
 
 <script>
-  import {Cell} from 'mint-ui';
-  import {getMailDetail} from "../../service/getData";
+  import {Cell,Toast} from 'mint-ui';
+  import {getMailDetail,unbindBox} from "../../service/getData";
   import headTop from 'src/components/header/head'
 
   export default {
     components: {
-      Cell, headTop
+      Cell, headTop,Toast
     },
     data() {
       return {
@@ -60,6 +64,21 @@
             this.surplusBattery = response.surplusBattery + '%'
           }
         }
+      },
+      async unBinding() {
+        var id = this.$route.query.id
+        var res = await unbindBox(id)
+        if (res.errorCode === "200") {
+          Toast({
+            message:'解绑成功!'
+          })
+          this.$router.push({path:'/myMailBox'})
+        }else {
+          Toast({
+            message:'操作失败，请重试!'
+          })
+        }
+
       }
     },
   }
@@ -145,6 +164,27 @@
     right: 15%;
     color: #007aff;
     /*background-color: #007aff;*/
+  }
+
+  .unbind {
+    position: relative;
+    margin-top: 60px;
+    width: 80%;
+    height: 30px;
+    margin-left: 10%;
+    text-align: center;
+  }
+
+  .unbind button{
+    border: none;
+    outline: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #e03636;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
   }
 
 

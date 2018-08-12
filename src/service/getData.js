@@ -97,6 +97,11 @@ var addMailBox = (deviceNo) => fetch('GET', '/' + serverName + '/wx/addMailbox',
   deviceNo: deviceNo,
   token: localStorage.getItem('token')
 });
+//  解绑邮筒
+var unbindBox = (id) => fetch('POST', '/' + serverName + '/wx/unbindingMailbox', {
+  id: id,
+  token: localStorage.getItem('token')
+});
 
 //  变更手机号
 var updateMobile = (phone, code) => fetch('GET', '/' + serverName + '/wx/updateMobile', {
@@ -126,6 +131,7 @@ export {
   updateMobile,
   allAddress,
   typeAndAddress,
+  unbindBox,
   serverUrl,
   weiXinUrl,
   appid,
